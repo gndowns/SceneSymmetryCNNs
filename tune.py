@@ -14,8 +14,11 @@ from keras.preprocessing.image import img_to_array
 from keras.applications.vgg16 import preprocess_input
 from keras.applications.vgg16 import decode_predictions
 
+# cifar10 data set loader taken from cnn_finetune/
+from load_cifar10 import load_cifar10_data
+
 # FINE TUNE VGG MODEL ====================================
-def tune():
+def adapted_vgg16(num_classes):
   # load existing vgg model
   vgg_model = VGG16()
 
@@ -28,9 +31,50 @@ def tune():
   # Truncate and replace final softmax layer for trasnfer learning
   # Remove original final layer
   model.layers.pop()
-  # Add new final dense layer (with 10 outputs instead of original 1,000)
-  model.add(Dense(10, activation='softmax'))
-  print(model.summary())
+  # Add new final dense layer (with new #/output categories instead of original 1,000)
+  model.add(Dense(num_classes, activation='softmax'))
+
+  # Freeze first 10 layers during re-training
+  for l in model.layers[:10]:
+    l.trainable = False
+
+  # Retrain using stochastic gradient descent
+  # (Learning Rate much smaller than original, since we are only fine tuning pre-trained weights)
+  sgd = SGD(lr=1e-3, decay=1e-6, momentum=0.9, nesterov=True)
+  # compile model with new training setup
+  model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
+
+  return model
 
 
-tune()
+def main():
+  # Load adapated VGG Model with final layer adpated to new data set
+  # Number of categories in new data set
+  num_classes=10
+  model = adapted_vgg16(num_classes) 
+
+  # Example of re-fitting with Cifar10 dataset
+  # (224x224 is default resolution for vgg16)
+  X_train, Y_train, X_valid, Y_valid = load_cifar10_data(img_rows=224, img_cols=224)
+  # arbitrarily taken from cnn_finetune/
+  batch_size = 16
+  nb_epoch = 10
+
+  # Fine Tune (re-train with new data set)
+  model.fit(X_train, Y_train,
+    batch_size=batch_size,
+    nb_epoch=nb_epoch,
+    shuffle=True,
+    verbose=1,
+    validation_data=(X_valid, Y_valid),
+  )
+
+  # Make Predictions (test data)
+  predictions_valid = model.predict(X_VALID, batch_size=batch_size, verbose=1)
+
+  # cross-entropy loss score
+  score = log_loss(Y_valid, predictions_valid)
+  print(score)
+
+
+main()
