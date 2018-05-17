@@ -33,8 +33,7 @@ yhat = model.predict(image)
 # convert probabilities to class labels
 label = decode_predictions(yhat)
 
-# retrieve most likely result (highest probability)
-label = label[0][0]
+# print top 5 classifactions and probabilities
+for l in label[0]:
+  print('%s (%.2f%%)' %(l[1],l[2]))
 
-# print classification
-print(label[1],label[2])
