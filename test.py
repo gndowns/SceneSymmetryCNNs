@@ -13,7 +13,7 @@ from load_cifar10 import load_cifar10_data
 # Path to tuned vgg model
 _MODEL_PATH = './vgg_cifar10_tuned.h5'
 
-def main():
+def test():
   # load tuned model
   model = load_model(_MODEL_PATH)
   
@@ -25,6 +25,8 @@ def main():
   predictions_valid = model.predict(
     X_valid, batch_size=batch_size, verbose=1
   )
+
+  print(len(X_valid[0]))
 
   # calculate percent correct
   num_correct = 0
@@ -49,5 +51,5 @@ if not os.path.exists(_MODEL_PATH):
   sys.exit(1)
 
 # Else if exists, test
-main()  
+test()  
 
