@@ -21,7 +21,9 @@ from sklearn.metrics import log_loss
 from load_cifar10 import load_cifar10_data
 
 # FINE TUNE VGG MODEL ====================================
-def adapted_vgg16(num_classes):
+# Takes in new Number of Classes and changes final layer 
+# of VGG16 to match this. All weights unchanged
+def adapt_vgg16(num_classes):
   # load existing vgg model
   vgg = VGG16()
 
@@ -53,27 +55,15 @@ def adapted_vgg16(num_classes):
   # compile model with new training setup
   model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
 
-  import numpy
-  og = vgg.get_weights()[0:10]
-  nw = model.get_weights()[0:10]
-  print(numpy.array_equal(og,nw))
-
   return model
 
 
-def main():
-  # Load adapated VGG Model with final layer adpated to new data set
-  # Number of categories in new data set
-  num_classes=10
-  model = adapted_vgg16(num_classes) 
-
-  # save new model & weights
-  #  model.save('vgg_cifar10_tuned.h5')
-
-  # Example of re-fitting with Cifar10 dataset
+# Fine Tunes the adapted VGG16 model to CIFAR10
+# by re-training and ony adjusting last few layer's weights
+def tune(model):
   # (224x224 is default resolution for vgg16)
   X_train, Y_train, X_valid, Y_valid = load_cifar10_data(img_rows=224, img_cols=224)
-  arbitrarily taken from cnn_finetune/
+  #  arbitrarily taken from cnn_finetune/
   batch_size = 16
   nb_epoch = 10
 
@@ -86,13 +76,25 @@ def main():
     validation_data=(X_valid, Y_valid),
   )
 
-
   # Make Predictions (test data)
   predictions_valid = model.predict(X_valid, batch_size=batch_size, verbose=1)
 
   # cross-entropy loss score
   score = log_loss(Y_valid, predictions_valid)
   print(score)
+
+
+def main():
+  # Load adapated VGG Model with final layer adpated to new data set
+  # Number of categories in new data set
+  num_classes=10
+  model = adapt_vgg16(num_classes) 
+
+  # save new model & weights
+  model.save('vgg_cifar10_tuned.h5')
+
+  # retrain new model
+  tune(model)
 
 
 main()
