@@ -5,7 +5,7 @@
 # Code taken from:
 # (1) https://machinelearningmastery.com/use-pre-trained-vgg-model-classify-objects-photographs/
 # (2) https://github.com/flyyufelix/cnn_finetune
-from keras.models import Sequential
+from keras.models import Model
 from keras.optimizers import SGD
 from keras.layers import Dense
 
@@ -23,19 +23,25 @@ from load_cifar10 import load_cifar10_data
 # FINE TUNE VGG MODEL ====================================
 def adapted_vgg16(num_classes):
   # load existing vgg model
-  vgg_model = VGG16()
-
-  # create our new model 
-  model = Sequential()
-  # copy over existing vgg layers
-  for l in vgg_model.layers:
-    model.add(l)
+  vgg = VGG16()
 
   # Truncate and replace final softmax layer for trasnfer learning
   # Remove original final layer
-  model.layers.pop()
+  vgg.layers.pop()
   # Add new final dense layer (with new #/output categories instead of original 1,000)
-  model.add(Dense(num_classes, activation='softmax'))
+  dense_layer = Dense(num_classes, activation='softmax')
+
+  # use original input
+  inp = vgg.input
+  # stack dense layer onto vgg model
+  # (must be called on a tensor, hence we call on 'output'
+  # of the now final layer of vgg model)
+  # returns tensor representing new layer added
+  out = dense_layer(vgg.layers[-1].output)
+
+  # generate new model: takes in input/output tensors
+  # and returns connected model with all layers between
+  model = Model(inp,out)
 
   # Freeze first 10 layers during re-training
   for l in model.layers[:10]:
@@ -47,6 +53,11 @@ def adapted_vgg16(num_classes):
   # compile model with new training setup
   model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
 
+  import numpy
+  og = vgg.get_weights()[0:10]
+  nw = model.get_weights()[0:10]
+  print(numpy.array_equal(og,nw))
+
   return model
 
 
@@ -56,10 +67,13 @@ def main():
   num_classes=10
   model = adapted_vgg16(num_classes) 
 
+  # save new model & weights
+  #  model.save('vgg_cifar10_tuned.h5')
+
   # Example of re-fitting with Cifar10 dataset
   # (224x224 is default resolution for vgg16)
   X_train, Y_train, X_valid, Y_valid = load_cifar10_data(img_rows=224, img_cols=224)
-  # arbitrarily taken from cnn_finetune/
+  arbitrarily taken from cnn_finetune/
   batch_size = 16
   nb_epoch = 10
 
@@ -72,8 +86,6 @@ def main():
     validation_data=(X_valid, Y_valid),
   )
 
-  # save new model & weights
-  model.save('vgg_cifar10_tuned.h5')
 
   # Make Predictions (test data)
   predictions_valid = model.predict(X_valid, batch_size=batch_size, verbose=1)
