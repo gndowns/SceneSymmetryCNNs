@@ -8,11 +8,14 @@
 from keras.models import Sequential
 from keras.optimizers import SGD
 from keras.layers import Dense
+
 from keras.applications.vgg16 import VGG16
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 from keras.applications.vgg16 import preprocess_input
 from keras.applications.vgg16 import decode_predictions
+
+from sklearn.metrics import log_loss
 
 # cifar10 data set loader taken from cnn_finetune/
 from load_cifar10 import load_cifar10_data
@@ -69,8 +72,11 @@ def main():
     validation_data=(X_valid, Y_valid),
   )
 
+  # save new model & weights
+  model.save('vgg_cifar10_tuned.h5')
+
   # Make Predictions (test data)
-  predictions_valid = model.predict(X_VALID, batch_size=batch_size, verbose=1)
+  predictions_valid = model.predict(X_valid, batch_size=batch_size, verbose=1)
 
   # cross-entropy loss score
   score = log_loss(Y_valid, predictions_valid)
