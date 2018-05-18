@@ -24,3 +24,7 @@ data/
 
 We used 1000 training images for each class, and 400 test images for each class, and achieved ~80% accuracy \
 following this [Keras blog tutorial](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html)
+
+## Usage
+Run `train.py` to generate and train the model. The model and its weights will be saved in `classifier.h5`. \
+Edit the code in `test.py` to run the classifier on specific test images and print the classifications.
