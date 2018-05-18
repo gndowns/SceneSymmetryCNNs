@@ -20,8 +20,8 @@ BATCH_SIZE = 16
 EPOCHS = 10 
 
 
-TRAIN_DATA_DIR = 'data/arc_length/intact/train'
-TEST_DATA_DIR = 'data/arc_length/intact/test'
+TRAIN_DATA_DIR = 'data/train'
+TEST_DATA_DIR = 'data/test'
 
 # one class for each scene category: beach,city,forest,highway,mountain,office
 NUM_CLASSES = 6
