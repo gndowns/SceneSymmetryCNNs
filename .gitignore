@@ -1,5 +1,3 @@
 *.swp
 *.pyc
 *.h5
-# sample line drawing images
-line_drawings/
