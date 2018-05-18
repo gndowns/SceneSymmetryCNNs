@@ -1,5 +1,7 @@
 # Generate small CNN to classify intact line drawings into 1 of 6 categories
 # Model Architecture based on mnist example
+# This one seems to have higher accuracy, but is quite a bit 
+# slower because it has less pooling layers
 
 from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
