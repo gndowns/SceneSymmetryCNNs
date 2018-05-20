@@ -8,6 +8,6 @@ All demos are run with:
 Run in Ubuntu 14.04.5 wthinin a virtual environment (see [TF docs](https://www.tensorflow.org/install/install_linux))
 
 ## Relevant Resources
-- https://machinelearningmastery.com/use-pre-trained-vgg-model-classify-objects-photographs/
-- https://github.com/flyyufelix/cnn_finetune
+- https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html  
+- https://github.com/jliphard/DeepEvolve
 
