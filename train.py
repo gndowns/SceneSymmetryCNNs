@@ -1,6 +1,6 @@
 # helper files for loading datasets and models
 from load_data import toronto_rgb, toronto_line_drawings
-from load_models import mnist
+from load_models import mnist, cat_dog
 
 def main():
   # Choose and load dataset from options
@@ -16,9 +16,10 @@ def main():
 
   # choose model architecture
   models = {
-    'mnist': mnist
+    'mnist': mnist,
+    'cat_dog': cat_dog
   }
-  model = models['mnist']
+  model = models['cat_dog']
 
   # laod and compile model
   model = model(input_shape, nb_classes)

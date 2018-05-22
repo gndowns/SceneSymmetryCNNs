@@ -4,7 +4,6 @@
 
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten, Dense
-from keras.optimizers import Adadelta
 from keras.losses import categorical_crossentropy
 
 # Keras MNIST example architecture, taken from
@@ -25,8 +24,37 @@ def mnist(input_shape, nb_classes):
   model.add(Dense(nb_classes, activation='softmax'))
 
   model.compile(loss=categorical_crossentropy,
-    optimizer=Adadelta(),
+    optimizer='Adadelta',
     metrics=['accuracy']
   )
 
   return model
+
+# Model used in Kears blog Cat vs Dog classifier example:
+# https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
+def cat_dog(input_shape, nb_classes):
+  model = Sequential()
+  # Conv layer 1
+  model.add(Conv2D(32, (3,3), activation='relu', input_shape=input_shape)) 
+  model.add(MaxPooling2D(pool_size=(2,2)))
+  # conv layer 2
+  model.add(Conv2D(32, (3,3), activation='relu'))
+  model.add(MaxPooling2D(pool_size=(2,2)))
+  # conv layer 3
+  model.add(Conv2D(64, (3,3), activation='relu'))
+  model.add(MaxPooling2D(pool_size=(2,2)))
+
+  # 2 Fully Connected layers, first with 0.5 dropout
+  model.add(Flatten())
+  model.add(Dense(64, activation='relu'))
+  model.add(Dropout(0.5))
+  # final predictions
+  model.add(Dense(nb_classes, activation='softmax'))
+
+  model.compile(loss=categorical_crossentropy,
+    optimizer='rmsprop',
+    metrics=['accuracy']
+  )
+
+  return model
+
