@@ -3,3 +3,5 @@
 *.h5
 # sample images
 data/
+# numpy arrays
+*.npy
