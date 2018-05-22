@@ -55,7 +55,7 @@ def toronto_rgb():
   )
 
   return (nb_classes, nb_train_samples, nb_test_samples, img_width, \
-    img_height, input_shape, batch_size, train_gen, test_gen)
+    img_height, input_shape, batch_size, train_dir, test_dir, train_gen, test_gen)
 
 # Line Drawings of Toronto 475 rgb images
 def toronto_line_drawings():
@@ -98,4 +98,4 @@ def toronto_line_drawings():
   )
 
   return (nb_classes, nb_train_samples, nb_test_samples, img_width, \
-    img_height, input_shape, batch_size, train_gen, test_gen)
+    img_height, input_shape, batch_size, train_dir, test_dir, train_gen, test_gen)

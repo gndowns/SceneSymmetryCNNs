@@ -12,7 +12,7 @@ def main():
 
   # import parameters for chosen dataset
   nb_classes, nb_train_samples, nb_test_samples, img_width, img_height, \
-    input_shape, batch_size, train_gen, test_gen = dataset()
+    input_shape, batch_size, train_dir, test_dir, train_gen, test_gen = dataset()
 
   # choose model architecture
   models = {
