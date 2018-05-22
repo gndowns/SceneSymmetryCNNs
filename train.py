@@ -1,5 +1,6 @@
 # helper files for loading datasets and models
 from load_data import toronto_rgb, toronto_line_drawings
+from load_models import mnist
 
 def main():
   # Choose and load dataset from options
@@ -9,8 +10,18 @@ def main():
   }
   dataset = datasets['toronto_rgb']
 
-  # use dictionary to call helper method to import data
+  # import parameters for chosen dataset
   nb_classes, nb_train_samples, nb_test_samples, img_width, img_height, \
     input_shape, batch_size, train_gen, test_gen = dataset()
+
+  # choose model architecture
+  models = {
+    'mnist': mnist
+  }
+  model = models['mnist']
+
+  # laod and compile model
+  model = model(input_shape, nb_classes)
+
 
 main()
