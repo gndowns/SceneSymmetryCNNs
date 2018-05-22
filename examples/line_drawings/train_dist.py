@@ -1,13 +1,17 @@
-# Generate small CNN to classify intact line drawings into 1 of 6 categories
-# Model Architecture based on mnist example (see vgg_line_drawings/examples/mnist/)
-# This one seems to have higher accuracy and consistency, but is quite a bit 
-# slower because it has less pooling layers
+# Using mnist architecture
+# applying distance transform to each image
 
 from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 from keras.layers import Conv2D, MaxPooling2D, Activation, Dropout, Flatten, Dense
 from keras.optimizers import Adadelta
 from keras.losses import categorical_crossentropy
+from scipy.ndimage import distance_transform_edt
+
+# DEBUGGING
+import pdb
+import numpy as np
+from scipy.misc import imsave
 
 # Arbitrarily chosen small size
 IMG_WIDTH, IMG_HEIGHT = 300, 300
@@ -68,7 +72,9 @@ def train(model):
     rescale = 1. / 255,
     shear_range = 0.2,
     zoom_range = 0.2,
-    horizontal_flip = True
+    horizontal_flip = True,
+    # Apply Eulid. Dist. transform to each image
+    preprocessing_function=dist_transform
   )
 
   # only re-scale for test data
@@ -95,7 +101,7 @@ def train(model):
   )
 
 
-  # train
+  # train for single epoch
   model.fit_generator(
     train_generator,
     steps_per_epoch = NUM_TRAIN_SAMPLES // BATCH_SIZE,
@@ -104,14 +110,16 @@ def train(model):
     validation_steps = NUM_TEST_SAMPLES // BATCH_SIZE
   )
 
-  # score
-  score = model.evaluate_generator(
-    generator = validation_generator,
-    steps = NUM_TEST_SAMPLES // BATCH_SIZE
-  )
-  print(score)
 
-
+# Input: 300x300x1 np array
+# Output: 300x300x1 np array with Euclidean Distance Tranform applied
+def dist_transform(image):
+  # image is in 0-255 scale, 255 == white, 0 == black
+  # distance function finds distance to 0 pixel, i.e. closest contour
+  image = distance_transform_edt(image)
+  # test results
+  imsave('TEST.jpg', np.squeeze(image))
+  pdb.set_trace() 
 
 
 def main():
