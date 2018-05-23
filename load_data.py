@@ -91,7 +91,7 @@ def toronto_line_drawings():
 
   test_gen = test_datagen.flow_from_directory(
     test_dir,
-    target_size = (img_widht, img_height),
+    target_size = (img_width, img_height),
     batch_size = batch_size,
     color_mode = 'grayscale',
     class_mode = 'categorical'
