@@ -22,8 +22,8 @@ def toronto_rgb():
   batch_size = 16
 
   # directories for test and train data, each contains 1 sub-directory per category
-  train_dir = 'data/rgb/train'
-  test_dir = 'data/rgb/test'
+  train_dir = 'data/toronto/rgb/train'
+  test_dir = 'data/toronto/rgb/test'
 
   # Augment training data
   train_datagen = ImageDataGenerator(
@@ -69,8 +69,8 @@ def toronto_line_drawings():
 
   batch_size = 16
 
-  train_dir = 'data/line_drawings/train'
-  test_dir = 'data/line_drawings/test'
+  train_dir = 'data/toronto/line_drawings/train'
+  test_dir = 'data/toronto/line_drawings/test'
 
   train_datagen = ImageDataGenerator(
     rescale = 1. / 255,
@@ -99,3 +99,12 @@ def toronto_line_drawings():
 
   return (nb_classes, nb_train_samples, nb_test_samples, img_width, \
     img_height, input_shape, batch_size, train_dir, test_dir, train_gen, test_gen)
+
+
+# MIT67 Original RGB Images
+def mit67_rgb():
+  # 67 scene categories
+  nb_classes = 67
+
+
+
