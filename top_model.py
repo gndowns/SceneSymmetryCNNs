@@ -38,7 +38,7 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
     # we want it to divide 356 and 119 nicely s.t. all samples are predicted
     # => use single image batches
     batch_size = 1,
-    # Ensures all images are used exactly once
+    # Disable shuffling so we can easily generate class labels
     shuffle = False
   )
   # same for test
@@ -47,40 +47,46 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
     target_size = (img_width, img_height),
     batch_size = 1,
     shuffle = False
+    #  shuffle = True
   )
+
 
   # output from just convolution layers of pre-trained VGG
   # i.e. bottleneck features
-  train_data = vgg.predict_generator(
+  x_train = vgg.predict_generator(
     generator = train_gen,
     steps = nb_train_samples
   )
-
-  # generate labels as binary class matrix
-  # i.e. 1 at correct label index, 0 elsewhere
-  train_labels = to_categorical(train_gen.classes)
-
-  # same for test data
-  test_data = vgg.predict_generator(
+  x_test = vgg.predict_generator(
     generator = test_gen,
     steps = nb_test_samples
   )
-  
-  test_labels = to_categorical(test_gen.classes)
 
-  # freeze outputs offline, (for use as input when training top dense layers)
-  return ((train_data, train_labels), (test_data, test_labels))
+  # generate labels (ONLY VALID FOR SHUFFLE=FALSE)
+  # Note: shuffling does not matter above since batch size=1, so we can shuffle
+  # x,y AFTER generating the labels for unshuffled data
+  # for larger batch size, with shuffle=true, we would need to generate the class
+  # labels by iterating through the generators test_gen, train_gen
+  # they each unpack (x,y) tuples of input, class label
+  # to_categorical converts class indices to binary class matrices
+  y_train = to_categorical(train_gen.classes)
+  y_test = to_categorical(test_gen.classes)
+
+  # optional: shuffle data here (must shuffle x,y with same seed)
+
+  return ((x_train, y_train), (x_test, y_test))
+
 
 
 # Train the top Dense layers independently
 # we will then "stack" them onto VGG lower layers
-def train_top_model(train, test, nb_classes, batch_size):
+def train_top_model(train_data, test_data, nb_classes, batch_size):
   # unpack
-  train_data, train_labels = train
-  test_data, test_labels = test
+  x_train,y_train = train_data
+  x_test,y_test = test_data
   # Top Model Architecture
   model = Sequential()
-  model.add(Flatten(input_shape=train_data.shape[1:]))
+  model.add(Flatten(input_shape=x_train.shape[1:]))
   model.add(Dense(256, activation='relu'))
   model.add(Dropout(0.5))
   # final output
@@ -92,10 +98,10 @@ def train_top_model(train, test, nb_classes, batch_size):
   )
 
   # train top model on bottleneck features
-  model.fit(train_data, train_labels,
+  model.fit(x_train, y_train,
     epochs = EPOCHS,
     batch_size = batch_size,
-    validation_data = test
+    validation_data = test_data
   )
 
 
@@ -106,6 +112,7 @@ def main():
     'toronto_line_drawings': toronto_line_drawings
   }
   dataset = datasets['toronto_rgb']
+  #  dataset = datasets['toronto_line_drawings']
 
   # import parameters for chosen dataset
   nb_classes, nb_train_samples, nb_test_samples, img_width, img_height, \
@@ -113,10 +120,12 @@ def main():
 
 
   # save output (data & labels) from lower VGG layers
-  train, test = bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples)
+  train_data, test_data = bottleneck_features(
+    train_dir,test_dir, nb_train_samples, nb_test_samples
+  )
 
   # train upper fully connected layers on this data
-  train_top_model(train, test, nb_classes, batch_size)
+  train_top_model(train_data, test_data, nb_classes, batch_size)
   
 
 main()
