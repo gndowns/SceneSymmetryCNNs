@@ -37,9 +37,6 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
   train_gen = datagen.flow_from_directory(
     train_dir,
     target_size = (img_width, img_height),
-    # We are only doing predictions, larger batch size does not really matter
-    # we want it to divide 356 and 119 nicely s.t. all samples are predicted
-    # => use single image batches
     batch_size = batch_size,
     # Disable shuffling so we can easily generate class labels
     shuffle = False
@@ -70,21 +67,16 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
   )
 
   # generate labels (ONLY VALID FOR SHUFFLE=FALSE)
-  # Note: shuffling does not matter above since batch size=1, so we can shuffle
-  # x,y AFTER generating the labels for unshuffled data
-  # for larger batch size, with shuffle=true, we would need to generate the class
-  # labels by iterating through the generators test_gen, train_gen
-  # they each unpack (x,y) tuples of (input, class matrix)
-  # here, to_categorical converts class indices to binary class matrices
+  # for shuffle=True must get labels by iter'ing through generators
   print('generating labels...')
   y_train = to_categorical(train_gen.classes)
   y_test = to_categorical(test_gen.classes)
 
-  # some samples excluded by divisibility of nb_samples
-  nb_train_batches = nb_train_samples // batch_size
-  nb_test_batches = nb_test_samples // batch_size
-  y_train = y_train[:nb_train_batches * batch_size]
-  y_test = y_test[:nb_test_batches * batch_size]
+  # some samples excluded by divisibility of nb_samples & batch_size
+  train_samples_used = (nb_train_samples // batch_size) * batch_size
+  test_samples_used = (nb_test_samples // batch_size) * batch_size
+  y_train = y_train[:train_samples_used]
+  y_test = y_test[:test_samples_used]
 
 
   # optional: shuffle data here (must shuffle x,y with same seed)
@@ -135,6 +127,8 @@ def train_top_model(train_data, test_data, nb_classes, batch_size):
   )
   print(score)
 
+  return model
+
 
 
 def main():
@@ -159,15 +153,11 @@ def main():
     train_dir,test_dir, nb_train_samples, nb_test_samples
   )
 
-  # save these offline since they're expensive to calculate
-  #  with open(dataset_str + '_bottleneck_train.npy', 'w') as fp:
-    #  np.save(fp, train_data)
-  #  with open(dataset_str + '_bottleneck_test.npy', 'w') as fp:
-    #  np.save(fp, test_data)
-
-
   # train upper fully connected layers on this data
-  train_top_model(train_data, test_data, nb_classes, batch_size)
+  model = train_top_model(train_data, test_data, nb_classes, batch_size)
+
+  # save final model
+  model.save(dataset_str + '_top_model.h5')
   
 
 main()
