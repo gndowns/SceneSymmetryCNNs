@@ -5,7 +5,7 @@
 # (2) https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
 
 # helper methods 
-from load_data import toronto_rgb, toronto_line_drawings
+import load_data
 
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
@@ -25,6 +25,9 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
   # Standard input size for VGG16
   img_width, img_height = 256, 256
 
+  # VARIABLE
+  batch_size = 32
+
   # No Data Augmentation, just rescale to 0-1
   datagen = ImageDataGenerator(rescale=1. / 255)
 
@@ -37,7 +40,7 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
     # We are only doing predictions, larger batch size does not really matter
     # we want it to divide 356 and 119 nicely s.t. all samples are predicted
     # => use single image batches
-    batch_size = 1,
+    batch_size = batch_size,
     # Disable shuffling so we can easily generate class labels
     shuffle = False
   )
@@ -45,21 +48,25 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
   test_gen = datagen.flow_from_directory(
     test_dir,
     target_size = (img_width, img_height),
-    batch_size = 1,
+    batch_size = batch_size,
     shuffle = False
-    #  shuffle = True
   )
 
 
   # output from just convolution layers of pre-trained VGG
   # i.e. bottleneck features
+  print('Calculating bottleneck features of training data...')
   x_train = vgg.predict_generator(
     generator = train_gen,
-    steps = nb_train_samples
+    steps = nb_train_samples // batch_size,
+    # useful for larger dataests like mit67
+    verbose=1
   )
+  print('Calculating bottleneck features of test data...')
   x_test = vgg.predict_generator(
     generator = test_gen,
-    steps = nb_test_samples
+    steps = nb_test_samples // batch_size,
+    verbose=1
   )
 
   # generate labels (ONLY VALID FOR SHUFFLE=FALSE)
@@ -67,10 +74,18 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
   # x,y AFTER generating the labels for unshuffled data
   # for larger batch size, with shuffle=true, we would need to generate the class
   # labels by iterating through the generators test_gen, train_gen
-  # they each unpack (x,y) tuples of input, class label
-  # to_categorical converts class indices to binary class matrices
+  # they each unpack (x,y) tuples of (input, class matrix)
+  # here, to_categorical converts class indices to binary class matrices
+  print('generating labels...')
   y_train = to_categorical(train_gen.classes)
   y_test = to_categorical(test_gen.classes)
+
+  # some samples excluded by divisibility of nb_samples
+  nb_train_batches = nb_train_samples // batch_size
+  nb_test_batches = nb_test_samples // batch_size
+  y_train = y_train[:nb_train_batches * batch_size]
+  y_test = y_test[:nb_test_batches * batch_size]
+
 
   # optional: shuffle data here (must shuffle x,y with same seed)
 
@@ -97,6 +112,14 @@ def train_top_model(train_data, test_data, nb_classes, batch_size):
     metrics=['accuracy']
   )
 
+  print('Baseline Evaluation (no training): ')
+  score = model.evaluate(
+    x_test, y_test,
+    batch_size = batch_size
+    # hard coded
+  )
+  print(score)
+
   # train top model on bottleneck features
   model.fit(x_train, y_train,
     epochs = EPOCHS,
@@ -104,15 +127,27 @@ def train_top_model(train_data, test_data, nb_classes, batch_size):
     validation_data = test_data
   )
 
+  print('Final Evaluation: ')
+  score = model.evaluate(
+    x_test, y_test,
+    batch_size = batch_size
+    # hard coded
+  )
+  print(score)
+
+
 
 def main():
   # Choose and load dataset from options
   datasets = {
-    'toronto_rgb': toronto_rgb,
-    'toronto_line_drawings': toronto_line_drawings
+    'toronto_rgb': load_data.toronto_rgb,
+    'toronto_line_drawings': load_data.toronto_line_drawings,
+    'mit67_rgb': load_data.mit67_rgb
   }
-  dataset = datasets['toronto_rgb']
+  #  dataset = datasets['toronto_rgb']
   #  dataset = datasets['toronto_line_drawings']
+  dataset_str = 'mit67_rgb'
+  dataset = datasets['mit67_rgb']
 
   # import parameters for chosen dataset
   nb_classes, nb_train_samples, nb_test_samples, img_width, img_height, \
@@ -123,6 +158,13 @@ def main():
   train_data, test_data = bottleneck_features(
     train_dir,test_dir, nb_train_samples, nb_test_samples
   )
+
+  # save these offline since they're expensive to calculate
+  #  with open(dataset_str + '_bottleneck_train.npy', 'w') as fp:
+    #  np.save(fp, train_data)
+  #  with open(dataset_str + '_bottleneck_test.npy', 'w') as fp:
+    #  np.save(fp, test_data)
+
 
   # train upper fully connected layers on this data
   train_top_model(train_data, test_data, nb_classes, batch_size)
