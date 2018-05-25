@@ -100,7 +100,7 @@ def train_top_model(train_data, test_data, nb_classes, batch_size):
   model.add(Dense(nb_classes, activation='softmax'))
 
   model.compile(optimizer='rmsprop',
-    loss='binary_crossentropy',
+    loss='categorical_crossentropy',
     metrics=['accuracy']
   )
 
@@ -130,7 +130,6 @@ def train_top_model(train_data, test_data, nb_classes, batch_size):
   return model
 
 
-
 def main():
   # Choose and load dataset from options
   datasets = {
@@ -138,10 +137,8 @@ def main():
     'toronto_line_drawings': load_data.toronto_line_drawings,
     'mit67_rgb': load_data.mit67_rgb
   }
-  #  dataset = datasets['toronto_rgb']
-  #  dataset = datasets['toronto_line_drawings']
   dataset_str = 'mit67_rgb'
-  dataset = datasets['mit67_rgb']
+  dataset = datasets[dataset_str]
 
   # import parameters for chosen dataset
   nb_classes, nb_train_samples, nb_test_samples, img_width, img_height, \
@@ -154,10 +151,10 @@ def main():
   )
 
   # train upper fully connected layers on this data
-  model = train_top_model(train_data, test_data, nb_classes, batch_size)
+  top_model = train_top_model(train_data, test_data, nb_classes, batch_size)
 
   # save final model
-  model.save(dataset_str + '_top_model.h5')
+  top_model.save(dataset_str + '_top_model.h5')
   
 
 main()
