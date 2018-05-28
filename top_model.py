@@ -13,6 +13,7 @@ from keras.models import Sequential
 from keras.layers import Dropout, Flatten, Dense
 from keras.applications import VGG16
 from keras.utils.np_utils import to_categorical
+from keras.optimizers import RMSprop
 
 # Copied from keras blog
 EPOCHS = 50
@@ -26,7 +27,7 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
   img_width, img_height = 256, 256
 
   # VARIABLE
-  batch_size = 32
+  batch_size = 32 
 
   # No Data Augmentation, just rescale to 0-1
   datagen = ImageDataGenerator(rescale=1. / 255)
@@ -84,7 +85,6 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
   return ((x_train, y_train), (x_test, y_test))
 
 
-
 # Train the top Dense layers independently
 # we will then "stack" them onto VGG lower layers
 def train_top_model(train_data, test_data, nb_classes, batch_size):
@@ -99,7 +99,10 @@ def train_top_model(train_data, test_data, nb_classes, batch_size):
   # final output
   model.add(Dense(nb_classes, activation='softmax'))
 
-  model.compile(optimizer='rmsprop',
+  model.compile(
+    # learning rate seems good
+    # experiment further with decay
+    optimizer= RMSprop(lr=1e-4, decay=0.01),
     loss='categorical_crossentropy',
     metrics=['accuracy']
   )
@@ -138,6 +141,8 @@ def main():
     'mit67_rgb': load_data.mit67_rgb
   }
   dataset_str = 'mit67_rgb'
+  #  dataset_str = 'toronto_rgb'
+  #  dataset_str = 'toronto_line_drawings'
   dataset = datasets[dataset_str]
 
   # import parameters for chosen dataset
@@ -153,8 +158,8 @@ def main():
   # train upper fully connected layers on this data
   top_model = train_top_model(train_data, test_data, nb_classes, batch_size)
 
-  # save final model
-  top_model.save(dataset_str + '_top_model.h5')
+  # save final model weights
+  top_model.save_weights(dataset_str + '_top_model.h5')
   
 
 main()
