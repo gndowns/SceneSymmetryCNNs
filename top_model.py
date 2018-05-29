@@ -179,8 +179,8 @@ def main():
     'mit67_rgb': load_data.mit67_rgb,
     'mit67_edges': load_data.mit67_edges
   }
-  #  dataset_str = 'mit67_rgb'
-  dataset_str = 'mit67_edges'
+  dataset_str = 'mit67_rgb'
+  #  dataset_str = 'mit67_edges'
   #  dataset_str = 'toronto_rgb'
   #  dataset_str = 'toronto_line_drawings'
   dataset = datasets[dataset_str]
@@ -205,6 +205,7 @@ def main():
   top_model = train_top_model(train_data, test_data, nb_classes, batch_size)
 
   # save final model weights
+  print('saving weights...')
   top_model.save_weights(dataset_str + '_top_model.h5')
   
 
