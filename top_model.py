@@ -16,8 +16,8 @@ from keras.utils.np_utils import to_categorical
 from keras.optimizers import RMSprop
 import os.path
 
-# Copied from keras blog
-EPOCHS = 50
+# Epochs upgraded from 50 to 100 for lr=1e-5
+EPOCHS = 100
 
 
 # Run Convolution layers of VGG16 ONCE on train/test set, and save predictions
@@ -138,9 +138,9 @@ def train_top_model(train_data, test_data, nb_classes, batch_size):
   model.add(Dense(nb_classes, activation='softmax'))
 
   model.compile(
-    # learning rate seems good
+    # lr changed from 1e-4 to 1e-5 
     # decay performing best at default 0
-    optimizer= RMSprop(lr=1e-4),
+    optimizer = RMSprop(lr=1e-5),
     loss='categorical_crossentropy',
     metrics=['accuracy']
   )
