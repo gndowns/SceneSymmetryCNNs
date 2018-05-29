@@ -26,8 +26,9 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
   # Standard input size for VGG16
   img_width, img_height = 256, 256
 
-  # VARIABLE
-  batch_size = 32 
+  # set batchsize=1 so that all images are seen exactly once
+  # (must ensure, since we don't use generators for training top model)
+  batch_size = 1 
 
   # No Data Augmentation, just rescale to 0-1
   datagen = ImageDataGenerator(rescale=1. / 255)
@@ -101,8 +102,8 @@ def train_top_model(train_data, test_data, nb_classes, batch_size):
 
   model.compile(
     # learning rate seems good
-    # experiment further with decay
-    optimizer= RMSprop(lr=1e-4, decay=0.01),
+    # decay performing best at default 0
+    optimizer= RMSprop(lr=1e-4),
     loss='categorical_crossentropy',
     metrics=['accuracy']
   )
@@ -138,12 +139,16 @@ def main():
   datasets = {
     'toronto_rgb': load_data.toronto_rgb,
     'toronto_line_drawings': load_data.toronto_line_drawings,
-    'mit67_rgb': load_data.mit67_rgb
+    'mit67_rgb': load_data.mit67_rgb,
+    'mit67_edges': load_data.mit67_edges
   }
-  dataset_str = 'mit67_rgb'
+  #  dataset_str = 'mit67_rgb'
+  dataset_str = 'mit67_edges'
   #  dataset_str = 'toronto_rgb'
   #  dataset_str = 'toronto_line_drawings'
   dataset = datasets[dataset_str]
+
+  print('training on ' + dataset_str + '...')
 
   # import parameters for chosen dataset
   nb_classes, nb_train_samples, nb_test_samples, img_width, img_height, \
