@@ -150,3 +150,55 @@ def mit67_rgb():
   return (nb_classes, nb_train_samples, nb_test_samples, img_width, \
     img_height, input_shape, batch_size, train_dir, test_dir, train_gen, test_gen)
 
+# MIT67 Computer Generated Rough Line Drawings (using Dollar Edge Detector)
+def mit67_edges():
+  # 67 scene categories
+  nb_classes = 67
+  
+  # These numbers aren't well rounded b/c some image names
+  # are repeated in trainImages.txt & testImages.txt
+  nb_train_samples = 5354
+  nb_test_samples = 1339
+
+  # just use VGG sizes
+  img_width, img_height = 256, 256
+  
+  # line drawings are single channle, B/W
+  #  input_shape = (img_width, img_height, 1)
+  input_shape = (img_width, img_height, 3)
+
+  # arbitrary
+  batch_size = 16 
+  
+  train_dir = 'data/mit67/edges/train'
+  test_dir = 'data/mit67/edges/test'
+  
+  # Data Augment
+  train_datagen = ImageDataGenerator(
+    rescale = 1. / 255,
+    shear_range = 0.2,
+    zoom_range = 0.2,
+    horizontal_flip = True
+  )
+  # only rescale for testing
+  test_datagen = ImageDataGenerator(rescale = 1. / 255)
+
+  train_gen = train_datagen.flow_from_directory(
+    train_dir,
+    target_size = (img_width, img_height),
+    batch_size = batch_size,
+    #  color_mode = 'grayscale',
+    class_mode = 'categorical'
+  )
+
+  test_gen = test_datagen.flow_from_directory(
+    test_dir,
+    target_size = (img_width, img_height),
+    batch_size = batch_size,
+    #  color_mode = 'grayscale',
+    class_mode = 'categorical'
+  )
+
+  return (nb_classes, nb_train_samples, nb_test_samples, img_width, \
+    img_height, input_shape, batch_size, train_dir, test_dir, train_gen, test_gen)
+
