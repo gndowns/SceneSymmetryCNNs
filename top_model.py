@@ -14,6 +14,7 @@ from keras.layers import Dropout, Flatten, Dense
 from keras.applications import VGG16
 from keras.utils.np_utils import to_categorical
 from keras.optimizers import RMSprop
+import os.path
 
 # Copied from keras blog
 EPOCHS = 50
@@ -22,7 +23,34 @@ EPOCHS = 50
 # Run Convolution layers of VGG16 ONCE on train/test set, and save predictions
 # These output 'bottleneck features' will be used as input for our Dense top layers
 # Prevents us from having to train all of VGG16 (very expensive), only have to train top layers
-def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
+def bottleneck_features(dataset_str, train_dir,test_dir, nb_train_samples, nb_test_samples):
+  # array of numpy data arrays: x_train, y_train, x_test, y_test
+  data = [None] * 4
+  # relevant file names for numpy arrays
+  f_names = ['x_train.npy', 'y_train.npy', 'x_test.npy', 'y_test.npy'] 
+
+  # check if bottleneck features have already been generated
+  print('checking for locally saved bottleneck features...')
+  saved_features = True
+  for i, f_name in enumerate(f_names):
+    f = dataset_str + '_bottleneck_' + f_name 
+    if not os.path.isfile(f):
+      print('no saved features found.')
+      saved_features = False
+      # don't bother with rest of files
+      break
+    else:
+      print('found ' + str(i+1) + '!')
+      with open(f) as fp:
+        data[i] = np.load(fp)
+      
+
+  # exit if saved features were loaded
+  if saved_features:
+    print('returning saved bottleneck features...')
+    return data
+
+  # Else if no locally saved bottleneck features, generate them now ===
   # Standard input size for VGG16
   img_width, img_height = 256, 256
 
@@ -83,7 +111,15 @@ def bottleneck_features(train_dir,test_dir, nb_train_samples, nb_test_samples):
 
   # optional: shuffle data here (must shuffle x,y with same seed)
 
-  return ((x_train, y_train), (x_test, y_test))
+  # save bottleneck features for future use (expensive to compute)
+  data = [x_train, y_train, x_test, y_test]
+  print('saving bottleneck features locally...')
+  for i, f_name in enumerate(f_names):
+    # save array to file
+    with open(dataset_str + '_bottleneck_' + f_name, 'w') as fp:
+      np.save(fp, data[i])
+
+  return data
 
 
 # Train the top Dense layers independently
@@ -92,6 +128,7 @@ def train_top_model(train_data, test_data, nb_classes, batch_size):
   # unpack
   x_train,y_train = train_data
   x_test,y_test = test_data
+  print('Constructing Top Model...')
   # Top Model Architecture
   model = Sequential()
   model.add(Flatten(input_shape=x_train.shape[1:]))
@@ -156,9 +193,13 @@ def main():
 
 
   # save output (data & labels) from lower VGG layers
-  train_data, test_data = bottleneck_features(
-    train_dir,test_dir, nb_train_samples, nb_test_samples
+  data = bottleneck_features(
+    dataset_str, train_dir,test_dir, nb_train_samples, nb_test_samples
   )
+
+  # unpack
+  train_data = (data[0], data[1])
+  test_data = (data[2], data[3])
 
   # train upper fully connected layers on this data
   top_model = train_top_model(train_data, test_data, nb_classes, batch_size)
