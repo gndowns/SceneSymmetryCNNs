@@ -8,10 +8,13 @@ import load_data
 from keras.applications import VGG16
 from keras.models import Sequential, Model
 from keras.layers import Input, Flatten, Dense, Dropout
-from keras.optimizers import SGD
+from keras.optimizers import SGD, Adam
 from keras.preprocessing.image import ImageDataGenerator
 
-EPOCHS = 50
+#  EPOCHS = 50
+# seems to plateau after this
+EPOCHS = 25
+
 
 
 # Link VGG16 base with our trained top_model classifier
@@ -33,8 +36,7 @@ def compile_model(input_shape, nb_classes, dataset_str):
   top_model = Flatten()(top_model)
   top_model = Dense(256, activation='relu')(top_model)
   top_model = Dropout(0.5)(top_model)
-  top_model = Dense(nb_classes, activation='softmax')(top_model)
-
+  top_model = Dense(nb_classes, activation='softmax')(top_model) 
   # convert stack of tensors to model
   model = Model(inputs=inputs, outputs=top_model)
 
@@ -44,6 +46,8 @@ def compile_model(input_shape, nb_classes, dataset_str):
 
   # compile with SGD and slow learning rate (only want to fine tune)
   model.compile(loss='categorical_crossentropy',
+    # recommended by Keras
+    # best out of all tried
     optimizer=SGD(lr=1e-4, momentum=0.9),
     metrics=['accuracy']
   )
@@ -51,7 +55,14 @@ def compile_model(input_shape, nb_classes, dataset_str):
   return model
 
 def train(model, train_gen, test_gen, batch_size, nb_train_samples, nb_test_samples):
-  # fine tuning
+  print('initial evaluaton: ')
+  score = model.evaluate_generator(
+    generator = test_gen,
+    steps = nb_test_samples // batch_size
+  )
+  print(score)
+
+  print('fine tuning...')
   model.fit_generator(
     train_gen,
     steps_per_epoch=nb_train_samples // batch_size,
@@ -73,14 +84,18 @@ def main():
   datasets = {
     'toronto_rgb': load_data.toronto_rgb,
     'toronto_line_drawings': load_data.toronto_line_drawings,
-    'mit67_rgb': load_data.mit67_rgb
+    'mit67_rgb': load_data.mit67_rgb,
+    'mit67_edges': load_data.mit67_edges
   }
   # SELECT DATASET HERE
   #  dataset_str = 'mit67_rgb'
-  dataset_str = 'toronto_rgb'
+  dataset_str = 'mit67_edges'
+  #  dataset_str = 'toronto_rgb'
   #  dataset_str = 'toronto_line_drawings'
 
   dataset = datasets[dataset_str]
+
+  print('Using dataset ' + dataset_str)
 
   # import data
   nb_classes, nb_train_samples, nb_test_samples, img_width, img_heigt, \
@@ -90,10 +105,12 @@ def main():
   full_model = compile_model(input_shape, nb_classes, dataset_str)  
   
   print('model compiled')
-  print('fine tuning...')
-
   # train top conv block and dense layers on selected dataset
   train(full_model, train_gen, test_gen, batch_size, nb_train_samples, nb_test_samples) 
+
+  print('saving model...')
+  full_model.save(dataset_str + '_top_conv_block.h5')
+  print('done!')
 
 
 main()
