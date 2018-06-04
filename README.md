@@ -25,5 +25,4 @@ Run in Ubuntu 14.04.5 wthinin a virtual environment (see [TF docs](https://www.t
 
 ## Relevant Resources
 - https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html  
-- https://github.com/jliphard/DeepEvolve
 
