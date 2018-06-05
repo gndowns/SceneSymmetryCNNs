@@ -11,6 +11,9 @@ BATCH_SIZE = 16
 
 
 def train(model, dataset):
+  # check if images are grayscale or rgb
+  color_mode = 'rgb' if dataset.nb_channels==3 else 'grayscale'
+
   # Generator for Data augmentation
   train_datagen = ImageDataGenerator(
     rescale=1./255,
@@ -26,6 +29,7 @@ def train(model, dataset):
     # TEMP: fixed
     target_size=(256, 256),
     batch_size=BATCH_SIZE,
+    color_mode=color_mode,
     class_mode='categorical'
   )
 
@@ -33,6 +37,7 @@ def train(model, dataset):
     dataset.test_dir,
     target_size=(256, 256),
     batch_size=BATCH_SIZE,
+    color_mode=color_mode,
     class_mode='categorical'
   )
 
@@ -48,7 +53,8 @@ def train(model, dataset):
 
 def main():
   # import parameters for chosen dataset
-  dataset_str = 'toronto_rgb'
+  #  dataset_str = 'toronto_rgb'
+  dataset_str = 'toronto_line_drawings'
   dataset = Dataset(dataset_str)
 
   # using fixed iamge size: (256, 256)
