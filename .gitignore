@@ -5,3 +5,7 @@
 data/
 # numpy arrays
 *.npy
+
+# modules
+__pycache__
+__init__.py
