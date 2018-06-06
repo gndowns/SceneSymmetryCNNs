@@ -278,3 +278,22 @@ def toronto_arc_length_symmetric():
 
   # new standard
   #  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+
+
+# Lower symmetric 50% of toronto line drawings (arc length normalized)
+def toronto_arc_length_asymmetric():
+  # most params are same as toronto_arc_length_symmetric
+  nb_classes = 6
+  nb_train_samples = 60 + 59 + 60 + 60 + 57 + 60
+  nb_test_samples = 20 + 20 + 20 + 20 + 19 + 20
+  # single input channel for grayscale
+  nb_channels = 1
+
+  train_dir = 'data/toronto/arc_length_asymmetric/train'
+  test_dir = 'data/toronto/arc_length_asymmetric/test'
+
+  return (nb_classes, nb_train_samples, nb_test_samples, 256, 256, (256, 256, 2), 16, \
+    train_dir, test_dir, None, None)
+
+  # new standard
+  #  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)

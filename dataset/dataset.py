@@ -11,6 +11,7 @@ class Dataset:
       'toronto_rgb': load_data.toronto_rgb,
       'toronto_line_drawings': load_data.toronto_line_drawings,
       'toronto_arc_length_symmetric': load_data.toronto_arc_length_symmetric,
+      'toronto_arc_length_asymmetric': load_data.toronto_arc_length_asymmetric,
       'mit67_rgb': load_data.mit67_rgb,
       'mit67_edges': load_data.mit67_edges,
       'mit67_line_drawings': load_data.mit67_line_drawings
