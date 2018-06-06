@@ -3,3 +3,4 @@
 
 rm *.npy
 rm *.h5
+rm *.pyc

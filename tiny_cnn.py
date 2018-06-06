@@ -66,7 +66,9 @@ def main():
     'mnist': load_models.mnist,
     'cat_dog': load_models.cat_dog
   }
-  model_loader = models['cat_dog']
+  #  model_str = 'cat_dog'
+  model_str = 'mnist'
+  model_loader = models[model_str]
 
   # load and compile model
   print('loading model architecture...')
