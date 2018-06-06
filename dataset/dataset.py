@@ -10,6 +10,7 @@ class Dataset:
     datasets = {
       'toronto_rgb': load_data.toronto_rgb,
       'toronto_line_drawings': load_data.toronto_line_drawings,
+      'toronto_arc_length_symmetric': load_data.toronto_arc_length_symmetric,
       'mit67_rgb': load_data.mit67_rgb,
       'mit67_edges': load_data.mit67_edges,
       'mit67_line_drawings': load_data.mit67_line_drawings
@@ -17,8 +18,12 @@ class Dataset:
     # load dataset attributes 
     data_loader = datasets[dataset_str]
 
+    # old attribute loader
     nb_classes, nb_train_samples, nb_test_samples, img_width, img_height, \
       input_shape, batch_size, train_dir, test_dir, train_gen, test_gen = data_loader()
+
+    # newer standard
+    #  nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir = data_loader()
     
     # assign attributes
     # (only some for now, may add more later)
@@ -26,6 +31,7 @@ class Dataset:
     self.nb_train_samples = nb_train_samples
     self.nb_test_samples = nb_test_samples
     # RGB (3) vs grayscale (1)
+    #  self.nb_channels = nb_channels
     self.nb_channels = input_shape[2]
     self.train_dir = train_dir
     self.test_dir = test_dir

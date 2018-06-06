@@ -66,6 +66,7 @@ def toronto_line_drawings():
   img_width, img_height = 256,256
   # single input channel for grayscale
   input_shape = (img_width, img_height, 1)
+  nb_channels = 1
 
   batch_size = 16
 
@@ -99,6 +100,9 @@ def toronto_line_drawings():
 
   return (nb_classes, nb_train_samples, nb_test_samples, img_width, \
     img_height, input_shape, batch_size, train_dir, test_dir, train_gen, test_gen)
+
+  # new standard
+  #  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
 
 
 # MIT67 Original RGB Images
@@ -253,3 +257,24 @@ def mit67_line_drawings():
     img_height, input_shape, batch_size, train_dir, test_dir, train_gen, test_gen)
 
 
+# Upper symmetric 50% of toronto line drawings
+# (based on arc length normalization)
+# NOTE: this data loader sets the new standard, the others should be adapted
+# to match its behaviour
+# Generators should be made elsewhere
+def toronto_arc_length_symmetric():
+  # most params are same as toronto_rgb & toronto_line_drawings
+  nb_classes = 6
+  nb_train_samples = 60 + 59 + 60 + 60 + 57 + 60
+  nb_test_samples = 20 + 20 + 20 + 20 + 19 + 20
+  # single input channel for grayscale
+  nb_channels = 1
+
+  train_dir = 'data/toronto/arc_length_symmetric/train'
+  test_dir = 'data/toronto/arc_length_symmetric/test'
+
+  return (nb_classes, nb_train_samples, nb_test_samples, 256, 256, (256, 256, 2), 16, \
+    train_dir, test_dir, None, None)
+
+  # new standard
+  #  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
