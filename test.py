@@ -33,15 +33,19 @@ def evaluate(model, dataset):
 
 def main():
   # dataset to be used
-  dataset_str = 'toronto_line_drawings'
+  #  dataset_str = 'toronto_line_drawings'
+  dataset_str = 'toronto_arc_length_symmetric'
   # h5 file of saved model
-  model_file = dataset_str + '_tiny_cnn.h5'
+  model_file = 'toronto_line_drawings_tiny_cnn.h5'
 
   # load dataset
+  print('loading dataset...')
   dataset = Dataset(dataset_str)
   # load saved model
+  print('loading model...')
   model = load_model(model_file)
 
+  print('evaluating...')
   evaluate(model, dataset)
 
 main()
