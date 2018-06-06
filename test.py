@@ -34,7 +34,8 @@ def evaluate(model, dataset):
 def main():
   # dataset to be used
   #  dataset_str = 'toronto_line_drawings'
-  dataset_str = 'toronto_arc_length_symmetric'
+  #  dataset_str = 'toronto_arc_length_symmetric'
+  dataset_str = 'toronto_arc_length_asymmetric'
   # h5 file of saved model
   model_file = 'toronto_line_drawings_tiny_cnn.h5'
 
