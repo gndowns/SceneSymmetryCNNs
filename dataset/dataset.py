@@ -4,6 +4,8 @@
 # module for loading individual dataset attributes
 import load_data
 
+from keras.preprocessing.image import ImageDataGenerator
+
 class Dataset:
   def __init__(self, dataset_str):
     # data loader functions for individual datasets
@@ -36,3 +38,20 @@ class Dataset:
     self.nb_channels = input_shape[2]
     self.train_dir = train_dir
     self.test_dir = test_dir
+
+  # Create test generator for given dataset and model attributes
+  def test_gen(self, color_mode, img_size, batch_size):
+    # Data generator, rescales all images from 0-255 to 0-1
+    test_datagen = ImageDataGenerator(rescale = 1. / 255)
+
+    # Pull images from class sub-directories
+    test_gen = test_datagen.flow_from_directory(
+      self.test_dir,
+      target_size = img_size,
+      batch_size = batch_size,
+      class_mode = 'categorical',
+      color_mode = color_mode
+    )
+
+    # return generator
+    return test_gen

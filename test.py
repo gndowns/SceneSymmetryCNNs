@@ -13,15 +13,8 @@ def evaluate(model, dataset):
   # grayscale or rgb, based on requirements of model
   color_mode = 'rgb' if model.input_shape[3]==3 else 'grayscale'
 
-  test_datagen = ImageDataGenerator(rescale=1./255)
-
-  test_gen = test_datagen.flow_from_directory(
-    dataset.test_dir,
-    target_size=(256, 256),
-    batch_size=BATCH_SIZE,
-    color_mode=color_mode,
-    class_mode='categorical'
-  )
+  # get dataset class based generator
+  test_gen = dataset.test_gen(color_mode, (256, 256), BATCH_SIZE)
 
   score = model.evaluate_generator(
     generator=test_gen,
