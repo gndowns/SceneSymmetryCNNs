@@ -107,7 +107,7 @@ def train(model, dataset_str, train_gen, test_gen, batch_size, nb_train_samples,
     save_best_only=True,
     # minimize loss
     mode='min',
-    # only save weights, not full model
+    # only save weights, not full model (faster)
     save_weights_only=True
   )
 
@@ -142,10 +142,10 @@ def main():
   }
   # SELECT DATASET HERE
   #  dataset_str = 'toronto_rgb'
-  #  dataset_str = 'toronto_line_drawings'
+  dataset_str = 'toronto_line_drawings'
   #  dataset_str = 'mit67_rgb'
   #  dataset_str = 'mit67_edges'
-  dataset_str = 'mit67_line_drawings'
+  #  dataset_str = 'mit67_line_drawings'
 
   dataset = datasets[dataset_str]
 
@@ -167,6 +167,8 @@ def main():
   # train top conv block and dense layers on selected dataset
   train(full_model, dataset_str, train_gen, test_gen, batch_size, nb_train_samples, nb_test_samples) 
 
+  # save model, with best weights
+  full_model.load_weights(dataset_str + '_top_conv_block_weights.h5')
   print('saving model...')
   full_model.save(dataset_str + '_top_conv_block.h5')
   print('done!')

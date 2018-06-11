@@ -181,10 +181,10 @@ def main():
     'mit67_line_drawings': load_data.mit67_line_drawings
   }
   #  dataset_str = 'toronto_rgb'
-  #  dataset_str = 'toronto_line_drawings'
+  dataset_str = 'toronto_line_drawings'
   #  dataset_str = 'mit67_rgb'
   #  dataset_str = 'mit67_edges'
-  dataset_str = 'mit67_line_drawings'
+  #  dataset_str = 'mit67_line_drawings'
   dataset = datasets[dataset_str]
 
   print('training on ' + dataset_str + '...')
