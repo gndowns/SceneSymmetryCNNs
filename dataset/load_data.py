@@ -297,3 +297,40 @@ def toronto_arc_length_asymmetric():
 
   # new standard
   #  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+
+# 50% nearest contours (minimum R measure on Toronto images)
+def to_min_r_near():
+  # most params are same as toronto_arc_length_symmetric
+  nb_classes = 6
+  nb_train_samples = 60 + 59 + 60 + 60 + 57 + 60
+  nb_test_samples = 20 + 20 + 20 + 20 + 19 + 20
+  # single input channel for grayscale
+  nb_channels = 1
+
+  train_dir = 'data/toronto/min_r_near/train'
+  test_dir = 'data/toronto/min_r_near/test'
+
+  return (nb_classes, nb_train_samples, nb_test_samples, 256, 256, (256, 256, 2), 16, \
+    train_dir, test_dir, None, None)
+
+  # new standard
+  #  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+
+# 50% furthest contours (minimum R measure)
+def to_min_r_far():
+  # most params are same as toronto_arc_length_symmetric
+  nb_classes = 6
+  nb_train_samples = 60 + 59 + 60 + 60 + 57 + 60
+  nb_test_samples = 20 + 20 + 20 + 20 + 19 + 20
+  # single input channel for grayscale
+  nb_channels = 1
+
+  train_dir = 'data/toronto/min_r_far/train'
+  test_dir = 'data/toronto/min_r_far/test'
+
+  return (nb_classes, nb_train_samples, nb_test_samples, 256, 256, (256, 256, 2), 16, \
+    train_dir, test_dir, None, None)
+
+  # new standard
+  #  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+

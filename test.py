@@ -28,7 +28,10 @@ def main():
   # dataset to be used
   #  dataset_str = 'toronto_line_drawings'
   #  dataset_str = 'toronto_arc_length_symmetric'
-  dataset_str = 'toronto_arc_length_asymmetric'
+  #  dataset_str = 'toronto_arc_length_asymmetric'
+  #  datset_str = 'to_min_r_far'
+  dataset_str = 'to_min_r_near'
+
   # h5 file of saved model
   #  model_file = 'toronto_line_drawings_tiny_cnn.h5'
   model_file = 'toronto_line_drawings_top_conv_block.h5'

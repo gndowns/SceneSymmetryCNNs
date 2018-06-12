@@ -16,7 +16,9 @@ class Dataset:
       'toronto_arc_length_asymmetric': load_data.toronto_arc_length_asymmetric,
       'mit67_rgb': load_data.mit67_rgb,
       'mit67_edges': load_data.mit67_edges,
-      'mit67_line_drawings': load_data.mit67_line_drawings
+      'mit67_line_drawings': load_data.mit67_line_drawings,
+      'to_min_r_near': load_data.to_min_r_near,
+      'to_min_r_far': load_data.to_min_r_far,
     }
     # load dataset attributes 
     data_loader = datasets[dataset_str]
