@@ -35,13 +35,34 @@ class Dataset:
     self.train_dir = train_dir
     self.test_dir = test_dir
 
+  # create training generator with simple data augmentation
+  def train_gen_aug(self, color_mode, img_size, batch_size):
+    # Data Augmentation
+    datagen = ImageDataGenerator(
+      rescale=1./255,
+      shear_range=0.2,
+      zoom_range=0.2,
+      horizontal_flip=True
+    )
+
+    # directory based generator
+    train_gen = datagen.flow_from_directory(
+      self.test_dir,
+      target_size = img_size,
+      batch_size = batch_size,
+      class_mode = 'categorical',
+      color_mode = color_mode
+    )
+
+    return train_gen
+
   # Create test generator for given dataset and model attributes
   def test_gen(self, color_mode, img_size, batch_size):
     # Data generator, rescales all images from 0-255 to 0-1
-    test_datagen = ImageDataGenerator(rescale = 1. / 255)
+    datagen = ImageDataGenerator(rescale = 1. / 255)
 
     # Pull images from class sub-directories
-    test_gen = test_datagen.flow_from_directory(
+    test_gen = datagen.flow_from_directory(
       self.test_dir,
       target_size = img_size,
       batch_size = batch_size,
