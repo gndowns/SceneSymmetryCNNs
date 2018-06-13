@@ -54,7 +54,16 @@ def train(model, dataset):
 def main():
   # import parameters for chosen dataset
   #  dataset_str = 'toronto_rgb'
-  dataset_str = 'toronto_line_drawings'
+  #  dataset_str = 'toronto_line_drawings'
+  #  dataset_str = 'toronto_arc_length_symmetric'
+  #  dataset_str = 'toronto_arc_length_asymmetric'
+  #  dataset_str = 'to_min_r_near'
+  #  dataset_str = 'to_min_r_far'
+  #  dataset_str = 'mit67_rgb'
+  dataset_str = 'mit67_edges'
+  #  dataset_str = 'mit67_line_drawings'
+
+
   dataset = Dataset(dataset_str)
 
   # using fixed iamge size: (256, 256)
