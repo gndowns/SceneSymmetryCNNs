@@ -8,11 +8,14 @@ from keras.preprocessing.image import ImageDataGenerator
 # Global training params
 EPOCHS = 10
 BATCH_SIZE = 16
+# variable
+IMG_SIZE = (256, 256)
 
 
 def train(model, dataset):
   # check if images are grayscale or rgb
   color_mode = 'rgb' if dataset.nb_channels==3 else 'grayscale'
+
 
   # Generator for Data augmentation
   train_datagen = ImageDataGenerator(
@@ -21,25 +24,18 @@ def train(model, dataset):
     zoom_range=0.2,
     horizontal_flip=True
   )
-  # test generator
-  test_datagen = ImageDataGenerator(rescale=1./255)
 
   train_gen = train_datagen.flow_from_directory(
     dataset.train_dir,
     # TEMP: fixed
-    target_size=(256, 256),
+    target_size=IMG_SIZE,
     batch_size=BATCH_SIZE,
     color_mode=color_mode,
     class_mode='categorical'
   )
 
-  test_gen = test_datagen.flow_from_directory(
-    dataset.test_dir,
-    target_size=(256, 256),
-    batch_size=BATCH_SIZE,
-    color_mode=color_mode,
-    class_mode='categorical'
-  )
+  # use class based generators
+  test_gen = dataset.test_gen(color_mode, IMG_SIZE, BATCH_SIZE)
 
   model.fit_generator(
     train_gen,
