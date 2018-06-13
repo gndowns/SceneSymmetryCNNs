@@ -27,6 +27,7 @@ class Dataset:
     
     # assign attributes
     # (only some for now, may add more later)
+    self.string = dataset_str
     self.nb_classes = nb_classes
     self.nb_train_samples = nb_train_samples
     self.nb_test_samples = nb_test_samples
