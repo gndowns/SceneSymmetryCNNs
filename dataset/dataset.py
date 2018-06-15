@@ -92,6 +92,9 @@ class Dataset:
       color_mode = color_mode
     )
 
+    # mapping of class labels to indices
+    class_indices = test_gen.class_indices
+
     # get number of channels
     nb_channels = 3 if color_mode=='rgb' else 1
 
@@ -106,4 +109,4 @@ class Dataset:
       # get class label from one-hot encoding
       y_test[i] = np.argmax(y)
 
-    return (x_test, y_test)
+    return (x_test, y_test, class_indices)

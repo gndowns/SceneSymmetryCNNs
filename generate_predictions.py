@@ -1,5 +1,7 @@
 # Agnostic testing script for generating prediction labels given model and dataset
+# takes dataset_str as single command line arg
 
+import sys
 from dataset.dataset import Dataset
 
 from keras.models import load_model
@@ -10,20 +12,13 @@ from scipy.io import savemat
 # Global train/test params
 BATCH_SIZE=16
 
-def main():
-  # dataset to be used
-  dataset_str = 'toronto_line_drawings'
-  #  dataset_str = 'toronto_arc_length_symmetric'
-  #  dataset_str = 'toronto_arc_length_asymmetric'
-  #  datset_str = 'to_min_r_far'
-  #  dataset_str = 'to_min_r_near'
-
+def main(dataset_str):
   # h5 file of saved model
   #  model_file = 'toronto_line_drawings_tiny_cnn.h5'
   model_file = 'toronto_line_drawings_top_conv_block.h5'
 
   # load dataset
-  print('loading dataset...')
+  print('loading dataset ' + dataset_str + '...')
   dataset = Dataset(dataset_str)
   # load saved model
   print('loading model...')
@@ -33,7 +28,7 @@ def main():
   color_mode = 'rgb' if model.input_shape[3]==3 else 'grayscale'
 
   # generate test data with labels
-  x_test, y_test = dataset.test_batch(color_mode)
+  x_test, y_test, class_indices = dataset.test_batch(color_mode)
 
   print('generating predictions...')
   batch_size = 16
@@ -45,7 +40,17 @@ def main():
 
 
   # save predictions and labels as matlab arrays
+  print('saving predictions...')
   savemat(dataset_str + '_test.mat', {'preds': preds, 'labels': y_test})
 
+  print('class indices: ')
+  print(class_indices)
 
-main()
+# check for command line argument - dataset_str
+if not len(sys.argv) == 2: 
+  print('Error: not enough arguments. Must call with name of desired dataset')
+  sys.exit()
+
+# call with first arg as dataset_str
+main(sys.argv[1])
+
