@@ -5,6 +5,7 @@
 import load_data
 
 from keras.preprocessing.image import ImageDataGenerator
+import numpy as np
 
 class Dataset:
   def __init__(self, dataset_str):
@@ -73,3 +74,36 @@ class Dataset:
 
     # return generator
     return test_gen
+
+  # Generates single batch of all test images with labels, no augment
+  def test_batch(self, color_mode):
+    # standard
+    img_width, img_height = (256, 256)
+
+    # no data augment, just rescale to 0-1
+    datagen = ImageDataGenerator(rescale=1. / 255)
+
+    # draw test images
+    test_gen = datagen.flow_from_directory(
+      self.test_dir,
+      target_size = (img_width, img_height),
+      # use batch_size=1 so that each image is used exactly once
+      batch_size = 1,
+      color_mode = color_mode
+    )
+
+    # get number of channels
+    nb_channels = 3 if color_mode=='rgb' else 1
+
+    # initialize arrays to hold data & labels
+    x_test = np.ndarray(shape=(self.nb_test_samples, img_width, img_height, nb_channels))
+    # class labels, NOT one hot encodings
+    y_test = np.ndarray(shape=(self.nb_test_samples))
+    # iterate over images to generate labels
+    for i in range(0, self.nb_test_samples):
+      x,y = next(test_gen)
+      x_test[i] = x
+      # get class label from one-hot encoding
+      y_test[i] = np.argmax(y)
+
+    return (x_test, y_test)
