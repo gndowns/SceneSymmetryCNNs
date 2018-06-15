@@ -5,6 +5,7 @@ from dataset.dataset import Dataset
 from keras.models import load_model
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
+from scipy.io import savemat
 
 # Global train/test params
 BATCH_SIZE=16
@@ -43,16 +44,8 @@ def main():
     preds[i] = np.argmax(p)
 
 
-  # ===== DEBUG =======
-  # check how many correct
-  nb_correct = 0
-  for i, p in enumerate(preds):
-    if p == y_test[i]:
-      nb_correct += 1
-
-  print(nb_correct)
-
-
+  # save predictions and labels as matlab arrays
+  savemat(dataset_str + '_test.mat', {'preds': preds, 'labels': y_test})
 
 
 main()
