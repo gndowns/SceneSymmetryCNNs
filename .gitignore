@@ -6,6 +6,9 @@ data/
 # numpy arrays
 *.npy
 
+# matlab data files
+*.mat
+
 # modules
 __pycache__
 __init__.py
