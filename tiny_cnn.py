@@ -8,38 +8,17 @@ from keras.preprocessing.image import ImageDataGenerator
 # Global training params
 EPOCHS = 10
 BATCH_SIZE = 16
+# variable
+IMG_SIZE = (256, 256)
 
 
 def train(model, dataset):
   # check if images are grayscale or rgb
   color_mode = 'rgb' if dataset.nb_channels==3 else 'grayscale'
 
-  # Generator for Data augmentation
-  train_datagen = ImageDataGenerator(
-    rescale=1./255,
-    shear_range=0.2,
-    zoom_range=0.2,
-    horizontal_flip=True
-  )
-  # test generator
-  test_datagen = ImageDataGenerator(rescale=1./255)
-
-  train_gen = train_datagen.flow_from_directory(
-    dataset.train_dir,
-    # TEMP: fixed
-    target_size=(256, 256),
-    batch_size=BATCH_SIZE,
-    color_mode=color_mode,
-    class_mode='categorical'
-  )
-
-  test_gen = test_datagen.flow_from_directory(
-    dataset.test_dir,
-    target_size=(256, 256),
-    batch_size=BATCH_SIZE,
-    color_mode=color_mode,
-    class_mode='categorical'
-  )
+  # use class based generators
+  train_gen = dataset.train_gen_aug(color_mode, IMG_SIZE, BATCH_SIZE)
+  test_gen = dataset.test_gen(color_mode, IMG_SIZE, BATCH_SIZE)
 
   model.fit_generator(
     train_gen,
@@ -50,11 +29,18 @@ def train(model, dataset):
   )
 
 
-
 def main():
   # import parameters for chosen dataset
-  #  dataset_str = 'toronto_rgb'
-  dataset_str = 'toronto_line_drawings'
+  dataset_str = 'toronto_rgb'
+  #  dataset_str = 'toronto_line_drawings'
+  #  dataset_str = 'toronto_arc_length_symmetric'
+  #  dataset_str = 'toronto_arc_length_asymmetric'
+  #  dataset_str = 'to_min_r_near'
+  #  dataset_str = 'to_min_r_far'
+  #  dataset_str = 'mit67_rgb'
+  #  dataset_str = 'mit67_line_drawings'
+
+
   dataset = Dataset(dataset_str)
 
   # using fixed iamge size: (256, 256)

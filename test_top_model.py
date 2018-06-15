@@ -1,20 +1,23 @@
 # Append top_model to VFGG16 Base and evaluate
 # NOTE: must first run `top_model.py` to train the top Dense layer
 
+from dataset.dataset import Dataset
 
-import load_data
 from keras.applications import VGG16
 from keras.models import Sequential, Model
 from keras.layers import Input, Flatten, Dense, Dropout
 from keras.optimizers import SGD
 
+IMG_SIZE = (256, 256)
+BATCH_SIZE = 16
+
 # Link VGG16 base with our trained top_model classifier
-def compile_model(input_shape, nb_classes):
+def compile_model(dataset):
   # pre-trained VGG16 base
   vgg = VGG16(weights='imagenet', include_top=False)
 
   # adjust for dataset's image size and num/channels
-  inputs = Input(shape=input_shape)
+  inputs = Input(shape=( IMG_SIZE + (dataset.nb_channels,) ))
   # returns a tensor of new model input with shape specified 
   top_model = vgg(inputs)
 
@@ -22,7 +25,7 @@ def compile_model(input_shape, nb_classes):
   top_model = Flatten()(top_model)
   top_model = Dense(256, activation='relu')(top_model)
   top_model = Dropout(0.5)(top_model)
-  top_model = Dense(nb_classes, activation='softmax')(top_model)
+  top_model = Dense(dataset.nb_classes, activation='softmax')(top_model)
 
   # convert stack of tensors to model
   model = Model(inputs=inputs, outputs=top_model)
@@ -32,7 +35,7 @@ def compile_model(input_shape, nb_classes):
   # (go back and save them)
 
   # use load weights by_name to only load top model weights
-  model.load_weights('mit67_rgb_top_model.h5', by_name=True)
+  model.load_weights(dataset.string + '_top_model.h5', by_name=True)
   #  model.load_weights('toronto_rgb_top_model.h5', by_name=True)
 
   # freeze lower layer weights (only tuen last conv block)
@@ -50,34 +53,29 @@ def compile_model(input_shape, nb_classes):
 
 
 def main():
-  # links to data loader functions
-  datasets = {
-    'toronto_rgb': load_data.toronto_rgb,
-    'toronto_line_drawings': load_data.toronto_line_drawings,
-    'mit67_rgb': load_data.mit67_rgb
-  }
   # SELECT DATASET HERE
-  dataset_str = 'mit67_rgb'
-  #  dataset_str = 'toronto_rgb'
-
-  dataset = datasets[dataset_str]
+  #  dataset_str = 'mit67_rgb'
+  dataset_str = 'toronto_rgb'
 
   # import data
-  nb_classes, nb_train_samples, nb_test_samples, img_width, img_heigt, \
-    input_shape, batch_size, train_dir, test_dir, train_gen, test_gen = dataset()
+  dataset = Dataset(dataset_str)
 
   print('building model...')
 
   # compile full VGG + top model
-  model = compile_model(input_shape, nb_classes)  
+  model = compile_model(dataset)
 
   print('model loaded')
   print('evaluating...')
 
+  color_mode = 'rgb' if dataset.nb_channels==3 else 'grayscale'
+
+  test_gen = dataset.test_gen(color_mode, IMG_SIZE, BATCH_SIZE)
+
   # evaluate
   score = model.evaluate_generator(
     generator = test_gen,
-    steps = nb_test_samples // batch_size
+    steps = dataset.nb_test_samples // BATCH_SIZE
   )
 
   print(score)
