@@ -99,6 +99,19 @@ def toronto_arc_length_asymmetric():
   return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
 
 
+# Computer Generated line drawings using Dollar Edge Detector
+def toronto_dollar_edges():
+  nb_classes = 6
+  nb_train_samples = 60 + 59 + 60 + 60 + 57 + 60
+  nb_test_samples = 20 + 20 + 20 + 20 + 19 + 20
+  # single input channel for grayscale
+  nb_channels = 1
+
+  train_dir = 'data/toronto/dollar_edges/train'
+  test_dir = 'data/toronto/dollar_edges/test'
+
+  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+
 # ======== MIT67 =============
 
 # MIT67 Original RGB Images
