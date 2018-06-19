@@ -66,7 +66,7 @@ for c in "${classes[@]}"; do
   # make test dir
   mkdir test/"$c"
   # put remaining 25% into testing
-  cp `ls "$unsplit_dir"/"$img_prefix"/*.png -v | tail -"{nb_test[i]}"` test/"$c"
+  cp `ls "$unsplit_dir"/"$img_prefix"/*.png -v | tail -"${nb_test[i]}"` test/"$c"
 
   # increment
   i=$((i+1))
