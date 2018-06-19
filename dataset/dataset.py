@@ -20,7 +20,8 @@ class Dataset:
       'mit67_line_drawings': load_data.mit67_line_drawings,
       'to_min_r_near': load_data.to_min_r_near,
       'to_min_r_far': load_data.to_min_r_far,
-      'toronto_dollar_edges': load_data.toronto_dollar_edges
+      'toronto_dollar_edges': load_data.toronto_dollar_edges,
+      'toronto_dR_grayscale': load_data.toronto_dR_grayscale
     }
     # load dataset attributes 
     data_loader = datasets[dataset_str]
