@@ -50,7 +50,7 @@ class Dataset:
 
     # directory based generator
     train_gen = datagen.flow_from_directory(
-      self.test_dir,
+      self.train_dir,
       target_size = img_size,
       batch_size = batch_size,
       class_mode = 'categorical',
