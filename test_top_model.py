@@ -17,7 +17,8 @@ def compile_model(dataset):
   vgg = VGG16(weights='imagenet', include_top=False)
 
   # adjust for dataset's image size and num/channels
-  inputs = Input(shape=( IMG_SIZE + (dataset.nb_channels,) ))
+  # always use 3 channels for VGG16
+  inputs = Input(shape=( IMG_SIZE + (3,) ))
   # returns a tensor of new model input with shape specified 
   top_model = vgg(inputs)
 
@@ -55,7 +56,8 @@ def compile_model(dataset):
 def main():
   # SELECT DATASET HERE
   #  dataset_str = 'mit67_rgb'
-  dataset_str = 'toronto_rgb'
+  #  dataset_str = 'toronto_rgb'
+  dataset_str = 'toronto_line_drawings'
 
   # import data
   dataset = Dataset(dataset_str)
@@ -68,7 +70,8 @@ def main():
   print('model loaded')
   print('evaluating...')
 
-  color_mode = 'rgb' if dataset.nb_channels==3 else 'grayscale'
+  # change colormode based on model requirements
+  color_mode = 'rgb' if model.input_shape[3]==3 else 'grayscale'
 
   test_gen = dataset.test_gen(color_mode, IMG_SIZE, BATCH_SIZE)
 
