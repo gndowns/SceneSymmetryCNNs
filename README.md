@@ -19,23 +19,21 @@ In each case, The top Dense layers of VGG16 were re-trained, and then the top de
 
 Scores are given in top-1 accuracy on the test set.
 
-Stats are taken over 10 trials.
-
 ### Split by Medial Radius
 
-| Dataset       | Mean     | Range              |
-| ------------- | -------  | -------------------|
-| Intact        | 94.12    |  92.23 - 96.12     |
-| Furthest 50%  | 79.88    |  75.73 - 83.50     |
-| Nearest 50%   | 57.16    |  53.40 - 62.14     |
+| Dataset       | Top-1 Accuaracy |
+| ------------- | ----------------|
+| Intact        | 96.64 |
+| Furthest 50%  | 84.03 |
+| Nearest 50%   | 58.82 |
 
-### Split by Symmetry Score (derivative of radius)
+### Split by Ribbon Symmetry Score (derivative of radius)
 
-| Dataset         | Mean     | Range              |
-| --------------- | -------  | -------------------|
-| Intact          | 94.12    |  92.23 - 96.12     |
-| Symmetric 50%   | 69.59    |  66.02 - 71.84     |
-| Asymmetric 50%  | 55.14    |  50.49 - 60.19     |
+| Dataset         | Top-1 Accuracy |
+| --------------- | ---------------|
+| Intact          | 96.64 |
+| Symmetric 50%   | 67.23 |
+| Asymmetric 50%  | 59.66 |
 
 
 ## Requirements
