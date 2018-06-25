@@ -18,6 +18,8 @@ def evaluate(model, dataset):
   # as they all call flow_from_directory)
   # e.g. multiple threads may eval on the same image,
   # and another image is ignored when the total number of steps is reached
+  # setting shuffle=False *mostly* solves it, since the workers are less
+  # likely to both take the same image then, since all use same order
   # details: https://github.com/keras-team/keras/issues/6499
 
   # instead use batch of data to ensure every image is seen exactly once
@@ -38,15 +40,20 @@ def evaluate(model, dataset):
 
 def main():
   # dataset to be used
-  dataset_str = 'toronto_line_drawings'
+  #  dataset_str = 'toronto_line_drawings'
   #  dataset_str = 'toronto_arc_length_symmetric'
   #  dataset_str = 'toronto_arc_length_asymmetric'
-  #  datset_str = 'to_min_r_far'
+  #  dataset_str = 'to_min_r_far'
   #  dataset_str = 'to_min_r_near'
+  #  dataset_str = 'mit67_smooth'
+  #  dataset_str = 'mit67_smooth_dR_symmetric'
+  dataset_str = 'mit67_smooth_dR_asymmetric'
+
 
   # h5 file of saved model
   #  model_file = 'toronto_line_drawings_tiny_cnn.h5'
-  model_file = 'toronto_line_drawings_top_conv_block.h5'
+  #  model_file = 'toronto_line_drawings_top_conv_block.h5'
+  model_file = 'mit67_smooth_all_conv.h5'
 
   # load dataset
   print('loading dataset...')
