@@ -15,13 +15,17 @@ class Dataset:
       'toronto_line_drawings': load_data.toronto_line_drawings,
       'toronto_arc_length_symmetric': load_data.toronto_arc_length_symmetric,
       'toronto_arc_length_asymmetric': load_data.toronto_arc_length_asymmetric,
-      'mit67_rgb': load_data.mit67_rgb,
-      'mit67_edges': load_data.mit67_edges,
-      'mit67_line_drawings': load_data.mit67_line_drawings,
       'to_min_r_near': load_data.to_min_r_near,
       'to_min_r_far': load_data.to_min_r_far,
       'toronto_dollar_edges': load_data.toronto_dollar_edges,
-      'toronto_dR_grayscale': load_data.toronto_dR_grayscale
+      'toronto_dR_grayscale': load_data.toronto_dR_grayscale,
+
+      'mit67_rgb': load_data.mit67_rgb,
+      'mit67_edges': load_data.mit67_edges,
+      'mit67_line_drawings': load_data.mit67_line_drawings,
+      'mit67_smooth': load_data.mit67_smooth,
+      'mit67_smooth_dR_symmetric': load_data.mit67_smooth_dR_symmetric,
+      'mit67_smooth_dR_asymmetric': load_data.mit67_smooth_dR_asymmetric
     }
     # load dataset attributes 
     data_loader = datasets[dataset_str]
@@ -60,6 +64,28 @@ class Dataset:
 
     return train_gen
 
+  # Data augmentation based on sketch-a-net strategies
+  def train_gen_sketch(self, batch_size):
+    datagen = ImageDataGenerator(
+      rescale=1. / 255,
+      horizontal_flip=True,
+      rotation_range=5,
+      # shift up to 32 pixels
+      width_shift_range=32,
+      height_shift_range=32
+    )
+
+    train_gen = datagen.flow_from_directory(
+      self.train_dir,
+      # standard sketch-a-net input size
+      target_size=(225, 225),
+      batch_size=batch_size,
+      class_mode='categorical',
+      color_mode='grayscale'
+    )
+
+    return train_gen
+
   # Create test generator for given dataset and model attributes
   def test_gen(self, color_mode, img_size, batch_size):
     # Data generator, rescales all images from 0-255 to 0-1
@@ -71,6 +97,8 @@ class Dataset:
       target_size = img_size,
       batch_size = batch_size,
       class_mode = 'categorical',
+      # seems to change behavior
+      #  shuffle=False,
       color_mode = color_mode
     )
 

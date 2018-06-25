@@ -189,3 +189,52 @@ def mit67_line_drawings():
   
   return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
 
+# MIT67 Further smoothed line drawings
+def mit67_smooth():
+  # 67 scene categories
+  nb_classes = 67
+  
+  nb_train_samples = 5354
+  nb_test_samples = 1339
+
+  # line drawings are single channle, B/W
+  nb_channels = 1
+
+  train_dir = 'data/mit67/smooth/train'
+  test_dir = 'data/mit67/smooth/test'
+  
+  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+
+
+# 50% symmetric split from mit67_smooth dataset (testing only)
+def mit67_smooth_dR_symmetric():
+  # 67 scene categories
+  nb_classes = 67
+  
+  nb_train_samples = None
+  nb_test_samples = 1339
+
+  # line drawings are single channle, B/W
+  nb_channels = 1
+
+  train_dir = None
+  test_dir = 'data/mit67/smooth_dR_symmetric/test'
+  
+  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+
+# 50% asymmetric split from mit67_smooth dataset (testing only)
+def mit67_smooth_dR_asymmetric():
+  # 67 scene categories
+  nb_classes = 67
+  
+  nb_train_samples = None
+  nb_test_samples = 1339
+
+  # line drawings are single channle, B/W
+  nb_channels = 1
+
+  train_dir = None
+  test_dir = 'data/mit67/smooth_dR_asymmetric/test'
+  
+  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+
