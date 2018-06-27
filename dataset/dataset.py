@@ -25,7 +25,9 @@ class Dataset:
       'mit67_line_drawings': load_data.mit67_line_drawings,
       'mit67_smooth': load_data.mit67_smooth,
       'mit67_smooth_dR_symmetric': load_data.mit67_smooth_dR_symmetric,
-      'mit67_smooth_dR_asymmetric': load_data.mit67_smooth_dR_asymmetric
+      'mit67_smooth_dR_asymmetric': load_data.mit67_smooth_dR_asymmetric,
+      'mit67_smooth_maxR_far': load_data.mit67_smooth_maxR_far,
+      'mit67_smooth_maxR_near': load_data.mit67_smooth_maxR_near
     }
     # load dataset attributes 
     data_loader = datasets[dataset_str]

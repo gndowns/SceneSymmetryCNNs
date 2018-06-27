@@ -238,3 +238,38 @@ def mit67_smooth_dR_asymmetric():
   
   return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
 
+
+# 50% furthest maxR split from mit67_smooth dataset (testing only)
+def mit67_smooth_maxR_far():
+  # 67 scene categories
+  nb_classes = 67
+  
+  nb_train_samples = None
+  nb_test_samples = 1339
+
+  # line drawings are single channle, B/W
+  nb_channels = 1
+
+  train_dir = None
+  test_dir = 'data/mit67/smooth_maxR_far/test'
+  
+  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+
+
+# 50% nearest maxR split from mit67_smooth dataset (testing only)
+def mit67_smooth_maxR_near():
+  # 67 scene categories
+  nb_classes = 67
+  
+  nb_train_samples = None
+  nb_test_samples = 1339
+
+  # line drawings are single channle, B/W
+  nb_channels = 1
+
+  train_dir = None
+  test_dir = 'data/mit67/smooth_maxR_near/test'
+  
+  return (nb_classes, nb_train_samples, nb_test_samples, nb_channels, train_dir, test_dir)
+
+
