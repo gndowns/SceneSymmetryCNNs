@@ -5,7 +5,6 @@ from dataset.dataset import Dataset
 from keras.models import load_model
 from keras.utils import to_categorical
 
-
 # Evaluate model on test set of given dataset object
 def evaluate(model, dataset):
   # grayscale or rgb, based on requirements of model
@@ -29,6 +28,15 @@ def evaluate(model, dataset):
   # convert class labels to one-hot encoded
   y_test = to_categorical(y_test, num_classes=dataset.nb_classes)
 
+
+  # OPTIONAL: recompile with different metrics
+  model.compile(loss='categorical_crossentropy', 
+    # keep current optimizer (won't be used anyway)
+    optimizer= model.optimizer,
+    metrics=['accuracy', 'top_k_categorical_accuracy']
+  )
+
+
   # evaluate
   score = model.evaluate(
     x_test,
@@ -47,7 +55,9 @@ def main():
   #  dataset_str = 'to_min_r_near'
   #  dataset_str = 'mit67_smooth'
   #  dataset_str = 'mit67_smooth_dR_symmetric'
-  dataset_str = 'mit67_smooth_dR_asymmetric'
+  #  dataset_str = 'mit67_smooth_dR_asymmetric'
+  #  dataset_str = 'mit67_smooth_maxR_far'
+  dataset_str = 'mit67_smooth_maxR_near'
 
 
   # h5 file of saved model
