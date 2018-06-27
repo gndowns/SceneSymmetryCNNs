@@ -25,9 +25,6 @@ def evaluate(model, dataset):
 
   # get batch of test data with labels
   (x_test, y_test, class_indices) = dataset.test_batch(color_mode)
-  # convert class labels to one-hot encoded
-  y_test = to_categorical(y_test, num_classes=dataset.nb_classes)
-
 
   # OPTIONAL: recompile with different metrics
   model.compile(loss='categorical_crossentropy', 

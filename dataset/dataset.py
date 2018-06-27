@@ -132,13 +132,13 @@ class Dataset:
 
     # initialize arrays to hold data & labels
     x_test = np.ndarray(shape=(self.nb_test_samples, img_width, img_height, nb_channels))
-    # class labels, NOT one hot encodings
-    y_test = np.ndarray(shape=(self.nb_test_samples))
+    # one-hot encoded labels
+    y_test = np.ndarray(shape=(self.nb_test_samples, self.nb_classes))
+
     # iterate over images to generate labels
     for i in range(0, self.nb_test_samples):
       x,y = next(test_gen)
       x_test[i] = x
-      # get class label from one-hot encoding
-      y_test[i] = np.argmax(y)
+      y_test[i] = y
 
     return (x_test, y_test, class_indices)
