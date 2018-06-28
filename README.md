@@ -43,7 +43,7 @@ Note the columns are cumulative, so `Top Convolution Block` indicates the Top De
 ## Toronto -- 475 Artist Line Drawings
 In each case, The top Dense layers of VGG16 were re-trained, and then the top dense layers and top convolution block were re-trained together. Training was only done on the intact line drawings. The testing images were the same for each category, although they were split based on different measures.
 
-Scores are given in top-1 accuracy on the test set.
+Scores are given in top-1 accuracy on the test set. Confusion matrices are given for each dataset for a breakdown in performance.
 
 ### Split by Medial Radius
 
@@ -53,6 +53,8 @@ Scores are given in top-1 accuracy on the test set.
 | Furthest 50%  | 84.03 |
 | Nearest 50%   | 58.82 |
 
+# 
+
 ### Split by Ribbon Symmetry Score (derivative of radius)
 
 | Dataset         | Top-1 Accuracy |
@@ -61,6 +63,41 @@ Scores are given in top-1 accuracy on the test set.
 | Symmetric 50%   | 67.23 |
 | Asymmetric 50%  | 59.66 |
 
+#### Confusion Matrices
+#### Intact
+
+| Actual Class: | beach | city | forest | highway | mountain | office |
+| ------------- | ----- | ---- | ------ | ------- | -------- | ------ |
+| beach         | 90    |   0  |   0    |   0     |   0      |    0   |
+| city          |  0    | 100  |   0    |   5     |   0      |    5   |
+| forest        |  5    |   0  | 100    |   0     |   0      |    0   |
+| highway       |  5    |   0  |   0    |  95     |   0      |    0   |
+| mountain      |  0    |   0  |   0    |   0     | 100      |    0   |
+| office        |  0    |   0  |   0    |   0     |   0      |   95   |
+
+#### Symmetric
+
+| Actual Class: | beach | city | forest | highway | mountain | office |
+| ------------- | ----- | ---- | ------ | ------- | -------- | ------ |
+| beach         | 100   |  10  |   0    |  15     |  50      |   25   |
+| city          |   0   |  50  |   0    |   0     |   0      |   10   |
+| forest        |   0   |  30  | 100    |   0     |   0      |   10   |
+| highway       |   0   |  10  |   0    |  85     |   0      |   35   |
+| mountain      |   0   |   0  |   0    |   0     |  50      |    0   |
+| office        |   0   |   0  |   0    |   0     |   0      |   15   |
+
+#### Asymmetric
+
+| Actual Class: | beach | city | forest | highway | mountain | office |
+| ------------- | ----- | ---- | ------ | ------- | -------- | ------ |
+| beach         |  95   |   0  |   0    |  40     |  25      |   15   |
+| city          |   0   |  35  |   0    |   0     |   0      |    0   |
+| forest        |   5   |  60  | 100    |  15     |   0      |   30   |
+| highway       |   0   |   5  |   0    |  45     |   0      |   45   |
+| mountain      |   0   |   0  |   0    |   0     |  75      |    0   |
+| office        |   0   |   0  |   0    |   0     |   0      |    5   |
+
+<br>
 
 ## Requirements
 All demos are run with:
