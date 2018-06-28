@@ -7,16 +7,12 @@ from dataset.dataset import Dataset
 from keras.models import load_model
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
-from scipy.io import savemat
+
 
 # Global train/test params
 BATCH_SIZE=16
 
-def main(dataset_str):
-  # h5 file of saved model
-  #  model_file = 'toronto_line_drawings_tiny_cnn.h5'
-  model_file = 'toronto_line_drawings_top_conv_block.h5'
-
+def generate_predictions(dataset_str, model_file):
   # load dataset
   print('loading dataset ' + dataset_str + '...')
   dataset = Dataset(dataset_str)
@@ -34,23 +30,10 @@ def main(dataset_str):
   batch_size = 16
   probs = model.predict(x_test, verbose=1)
   # convert prob vectors to single predictions
-  preds = np.ndarray(shape=(dataset.nb_test_samples))
+  y_pred = np.ndarray(shape=(dataset.nb_test_samples))
   for i,p in enumerate(probs):
-    preds[i] = np.argmax(p)
+    y_pred[i] = np.argmax(p)
 
 
-  # save predictions and labels as matlab arrays
-  print('saving predictions...')
-  savemat(dataset_str + '_test.mat', {'preds': preds, 'labels': y_test})
-
-  print('class indices: ')
-  print(class_indices)
-
-# check for command line argument - dataset_str
-if not len(sys.argv) == 2: 
-  print('Error: not enough arguments. Must call with name of desired dataset')
-  sys.exit()
-
-# call with first arg as dataset_str
-main(sys.argv[1])
+  return (y_test, y_pred, class_indices)
 
