@@ -53,6 +53,7 @@ def k_fold_cross_val(dataset):
   scores = []
   # train a model for each fold
   for train_index, test_index in kfold.split(X,labels):
+    #  top_model = top_model_k_fold
     score = train_fold(dataset,X, Y, train_index, test_index)
     scores.append(score)
 
