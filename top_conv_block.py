@@ -14,11 +14,13 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint
 
 #  EPOCHS = 50
-# seems to plateau after this
-#  EPOCHS = 25
+# seems to plateau after this on mit67
+EPOCHS = 25
 # run for long time and save best weights using Checkpoints
-EPOCHS = 100
+# 100 works better for toronto
+#  EPOCHS = 100
 BATCH_SIZE = 16
+IMG_SIZE = (224, 224)
 
 
 # Link VGG16 base with our trained top_model classifier
@@ -31,7 +33,7 @@ def compile_model(dataset):
     layer.trainable = False
 
   # standard input size for VGG16
-  inputs = Input(shape=(256, 256, 3))
+  inputs = Input(shape=IMG_SIZE + (3,))
 
   # returns a tensor of new model input with shape specified 
   top_model = vgg(inputs)
@@ -61,8 +63,8 @@ def compile_model(dataset):
 def train(model, dataset):
   # augmented training data & regular test data generators
   # note: VGG is always rgb colormode, 256x256
-  train_gen = dataset.train_gen_aug('rgb', (256, 256), BATCH_SIZE)
-  test_gen = dataset.test_gen('rgb', (256, 256), BATCH_SIZE)
+  train_gen = dataset.train_gen_aug('rgb', IMG_SIZE, BATCH_SIZE)
+  test_gen = dataset.test_gen('rgb', IMG_SIZE, BATCH_SIZE)
 
   print('initial evaluaton: ')
   score = model.evaluate_generator(
@@ -115,6 +117,7 @@ def main():
   #  dataset_str = 'mit67_rgb'
   #  dataset_str = 'mit67_edges'
   #  dataset_str = 'mit67_line_drawings'
+  #  dataset_str = 'mit67_smooth'
 
   dataset = Dataset(dataset_str)
 
