@@ -18,12 +18,14 @@ import os.path
 
 # Epochs upgraded from 50 to 100 for lr=1e-5
 EPOCHS = 100
+BATCH_SIZE = 16
+# standard for VGG16 architecture
+IMG_SIZE = (224, 224)
 
 
 # Run Convolution layers of VGG16 ONCE on train/test set, and save predictions
 # These output 'bottleneck features' will be used as input for our Dense top layers
 # Prevents us from having to train all of VGG16 (very expensive), only have to train top layers
-#  def bottleneck_features(dataset_str, train_dir,test_dir, nb_train_samples, nb_test_samples):
 def bottleneck_features(dataset):
   # array of numpy data arrays: x_train, y_train, x_test, y_test
   data = [None] * 4
@@ -51,9 +53,7 @@ def bottleneck_features(dataset):
     print('returning saved bottleneck features...')
     return data
 
-  # Else if no locally saved bottleneck features, generate them now ===
-  # Standard input size for VGG16
-  img_width, img_height = 256, 256
+  # === if no saved bottleneck features, generate now ===
 
   # set batchsize=1 so that all images are seen exactly once
   # (must ensure, since we don't use generators for training top model)
@@ -67,7 +67,7 @@ def bottleneck_features(dataset):
 
   train_gen = datagen.flow_from_directory(
     dataset.train_dir,
-    target_size = (img_width, img_height),
+    target_size = IMG_SIZE,
     batch_size = batch_size,
     # Disable shuffling so we can easily generate class labels
     shuffle = False
@@ -75,7 +75,7 @@ def bottleneck_features(dataset):
   # same for test
   test_gen = datagen.flow_from_directory(
     dataset.test_dir,
-    target_size = (img_width, img_height),
+    target_size = IMG_SIZE,
     batch_size = batch_size,
     shuffle = False
   )
@@ -86,14 +86,14 @@ def bottleneck_features(dataset):
   print('Calculating bottleneck features of training data...')
   x_train = vgg.predict_generator(
     generator = train_gen,
-    steps = dataset.nb_train_samples // batch_size,
+    steps = dataset.nb_train_samples,
     # useful for larger dataests like mit67
     verbose=1
   )
   print('Calculating bottleneck features of test data...')
   x_test = vgg.predict_generator(
     generator = test_gen,
-    steps = dataset.nb_test_samples // batch_size,
+    steps = dataset.nb_test_samples,
     verbose=1
   )
 
@@ -103,14 +103,9 @@ def bottleneck_features(dataset):
   y_train = to_categorical(train_gen.classes)
   y_test = to_categorical(test_gen.classes)
 
-  # some samples excluded by divisibility of nb_samples & batch_size
-  train_samples_used = (dataset.nb_train_samples // batch_size) * batch_size
-  test_samples_used = (dataset.nb_test_samples // batch_size) * batch_size
-  y_train = y_train[:train_samples_used]
-  y_test = y_test[:test_samples_used]
-
-
   # optional: shuffle data here (must shuffle x,y with same seed)
+  # this isn't needed here though since model.fit() automatically 
+  # shuffles data
 
   # save bottleneck features for future use (expensive to compute)
   data = [x_train, y_train, x_test, y_test]
@@ -122,17 +117,9 @@ def bottleneck_features(dataset):
 
   return data
 
-
-# Train the top Dense layers independently
-# we will then "stack" them onto VGG lower layers
-def train_top_model(dataset, train_data, test_data):
-  # variable
-  batch_size = 16
-
-  # unpack
-  x_train,y_train = train_data
-  x_test,y_test = test_data
-  print('Constructing Top Model...')
+# Loads architecture of top model only
+def load_top_model():
+  print('compiling top model...')
   # Top Model Architecture
   model = Sequential()
   model.add(Flatten(input_shape=x_train.shape[1:]))
@@ -142,17 +129,23 @@ def train_top_model(dataset, train_data, test_data):
   model.add(Dense(dataset.nb_classes, activation='softmax'))
 
   model.compile(
-    # lr changed from 1e-4 to 1e-5 
+    # lr lowered from 1e-4 to 1e-5 
     # decay performing best at default 0
     optimizer = RMSprop(lr=1e-5),
     loss='categorical_crossentropy',
     metrics=['accuracy']
   )
 
+  return model
+
+
+# Train the top Dense layers independently
+# we will then "stack" them onto VGG lower layers
+def train_top_model(model, x_train, y_train, x_test, y_test):
   print('Baseline Evaluation (no training): ')
   score = model.evaluate(
     x_test, y_test,
-    batch_size = batch_size
+    batch_size = BATCH_SIZE,
     # hard coded
   )
   print(score)
@@ -160,46 +153,44 @@ def train_top_model(dataset, train_data, test_data):
   # train top model on bottleneck features
   model.fit(x_train, y_train,
     epochs = EPOCHS,
-    batch_size = batch_size,
-    validation_data = test_data
+    batch_size = BATCH_SIZE,
+    validation_data = (x_test, y_test)
   )
 
   print('Final Evaluation: ')
   score = model.evaluate(
     x_test, y_test,
-    batch_size = batch_size
-    # hard coded
+    batch_size = BATCH_SIZE
   )
   print(score)
 
-  return model
 
 
-def main():
+# If run from the command line as a single file, train and test
+# with dataset specified in code below
+if __name__ == '__main__':
   # Choose and load dataset from options
-  dataset_str = 'toronto_rgb'
-  #  dataset_str = 'toronto_line_drawings'
+  #  dataset_str = 'toronto_rgb'
+  dataset_str = 'toronto_line_drawings'
   #  dataset_str = 'mit67_rgb'
   #  dataset_str = 'mit67_edges'
   #  dataset_str = 'mit67_line_drawings'
-
+  #  dataset_str = 'toronto_dollar_edges'
+  #  dataset_str = 'mit67_smooth'
 
   dataset = Dataset(dataset_str)
 
   print('training on ' + dataset_str + '...')
 
-  data = bottleneck_features(dataset)
+  x_train, y_train, x_test, y_test = bottleneck_features(dataset)
 
-  # unpack
-  train_data = (data[0], data[1])
-  test_data = (data[2], data[3])
-
+  # compile model
+  model = load_top_model()
   # train upper fully connected layers on this data
-  top_model = train_top_model(dataset, train_data, test_data)
+  train_top_model(model, x_train, y_train, x_test, y_test)
 
   # save final model weights
   print('saving weights...')
-  top_model.save_weights(dataset_str + '_top_model.h5')
-  
+  model.save_weights(dataset_str + '_top_model.h5')
 
-main()
+
