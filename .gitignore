@@ -10,3 +10,6 @@
 # modules
 __pycache__
 __init__.py
+
+# examples images
+*.png
