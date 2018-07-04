@@ -20,24 +20,6 @@ COLOR_MODE = 'rgb'
 # 3 channels for VGG compatability 
 INPUT_SHAPE = IMG_SIZE + (3,)
 
-# train and evaluate model
-def train_fold(dataset, X, Y, train_index, test_index):
-  # load mnist model
-  model = load_models.mnist(INPUT_SHAPE, dataset.nb_classes)
-
-  # train
-  model.fit(X[train_index], Y[train_index],
-    batch_size = BATCH_SIZE,
-    epochs = EPOCHS,
-    validation_data = (X[test_index], Y[test_index])
-  )
-
-  # evaluate
-  score = model.evaluate(X[test_index], Y[test_index])
-
-  # only return accuracy
-  return score[1]
-
 
 # implement k-fold cross validation
 def k_fold_cross_val(dataset):
@@ -56,7 +38,7 @@ def k_fold_cross_val(dataset):
 
   scores = []
   i=1
-  # train a model for each fold
+  # train & test a model for each fold
   for train_idx, test_idx in kfold.split(X,labels):
     print('fold ' + str(i) + ' of 5')
 
@@ -68,15 +50,19 @@ def k_fold_cross_val(dataset):
 
     # tune top layers of VGG model, 
     # using trained top model weights
-    score = train_top_conv_block(
+    model = train_top_conv_block(
       X[train_idx], Y[train_idx],
       X[test_idx], Y[test_idx],
       top_model
     )
 
-    scores.append(score)
+    # evaluate trained model
+    score = model.evaluate(X[test_idx], Y[test_idx])
 
-    # clear memory
+    # append accuracy score only
+    scores.append(score[1])
+
+    # clear tensorflow memory
     K.clear_session()
 
     i += 1

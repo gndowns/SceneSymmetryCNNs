@@ -11,8 +11,9 @@ from keras.optimizers import SGD
 
 # global training params
 BATCH_SIZE = 16
-# works well for toronto set
-EPOCHS = 100
+# 100 too much, seems to overfit on Toronto
+#  EPOCHS = 100
+EPOCHS = 50
 
 # standard for VGG16
 IMG_SIZE = (224, 224)
@@ -54,6 +55,9 @@ def train_top_conv_block(x_train, y_train, x_test, y_test, top_model):
     batch_size = BATCH_SIZE,
     validation_data = (x_test, y_test),
   )
+
+  # return trained model
+  return model
 
   # get final model score
   score = model.evaluate(x_test, y_test)
