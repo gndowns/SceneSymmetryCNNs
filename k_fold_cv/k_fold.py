@@ -10,6 +10,7 @@ from keras import backend as K
 import numpy as np
 
 from top_model import bottleneck_features, train_top_model
+from top_conv_block import train_top_conv_block
 
 # global training params
 EPOCHS = 10
@@ -60,10 +61,20 @@ def k_fold_cross_val(dataset):
     print('fold ' + str(i) + ' of 5')
 
     # train top model on bottleneck features
-    top_model_weights = train_top_model(
+    top_model = train_top_model(
       X_bottleneck[train_idx], Y[train_idx],
       X_bottleneck[test_idx], Y[test_idx]
     )
+
+    # tune top layers of VGG model, 
+    # using trained top model weights
+    score = train_top_conv_block(
+      X[train_idx], Y[train_idx],
+      X[test_idx], Y[test_idx],
+      top_model
+    )
+
+    scores.append(score)
 
     # clear memory
     K.clear_session()

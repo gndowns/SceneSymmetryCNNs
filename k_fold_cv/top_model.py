@@ -34,7 +34,7 @@ def bottleneck_features(X):
   return features
 
 
-# trains top model on bottleneck features and returns weights
+# trains top model on bottleneck features and returns model
 def train_top_model(x_train, y_train, x_test, y_test):
   # load top model architecture
   model = Sequential()
@@ -60,5 +60,6 @@ def train_top_model(x_train, y_train, x_test, y_test):
   )
 
   # return the trained weights
-  return model.get_weights()
+  #  return model.get_weights()
+  return model
 
