@@ -8,7 +8,7 @@ from keras.models import Sequential, Model
 from keras.layers import Input, Flatten, Dense, Dropout
 from keras.optimizers import SGD
 
-IMG_SIZE = (256, 256)
+IMG_SIZE = (224, 224)
 BATCH_SIZE = 16
 
 # Link VGG16 base with our trained top_model classifier
