@@ -12,8 +12,8 @@ from keras.layers import Flatten, Dense, Dropout
 from keras.optimizers import RMSprop
 
 # global training params
-#  EPOCHS = 100
-# fewer epochs needed for Toronto 475
+# 50 Epochs is good for Toronto-475,
+# starts overfitting after that
 EPOCHS = 50
 BATCH_SIZE = 16
 
