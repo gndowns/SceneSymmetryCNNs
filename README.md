@@ -99,6 +99,21 @@ Scores are given in top-1 accuracy on the test set. Confusion matrices are given
 
 <br>
 
+### 5-Fold Cross Validation
+The above results were given using an arbitrary test set of about 20 images per class. However since the dataset is small and there is no well defined train/test split the experiments were re-run with 5-fold cross validation, again leaving about 20 images per class per fold.
+For each fold, the top fully connected classifer was first trained independently on the feature maps output by the VGG16 convolutional base; this top model was then trained together with the top convolutional block of VGG16. Top-1 accuracy was measured on the heldout testing set.
+The confusion matrices from each fold were combined to give the final full confusion matrix.
+
+| Dataset         | Top-1 Accuracy (mean over 5 folds)|
+| --------------- | ----------------------------------|
+| Intact          | 93.05 |
+| Symmetric 50%   | 72.24 |
+| Asymmetric 50%  | 61.05 |
+
+
+
+
+
 ## Requirements
 All demos are run with:
 - Python v2.7.6
