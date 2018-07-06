@@ -110,6 +110,35 @@ The confusion matrices from each fold were combined to give the final full confu
 | Symmetric 50%   | 72.24 |
 | Asymmetric 50%  | 61.05 |
 
+#### Intact
+| Actual Class: | beach | city | forest | highway | mountain | office |
+| ------------- | ----- | ---- | ------ | ------- | -------- | ------ |
+| beach         |  71   |   0  |   0    |   0     |   1      |    0   |
+| city          |   0   |  68  |   1    |   5     |   0      |    1   |
+| forest        |   2   |   3  |  79    |   0     |   0      |    0   |
+| highway       |   4   |   2  |   0    |  72     |   0      |    0   |
+| mountain      |   3   |   0  |   0    |   0     |  75      |    0   |
+| office        |   0   |   6  |   0    |   3     |   0      |   79   |
+
+#### Symmetric
+| Actual Class: | beach | city | forest | highway | mountain | office |
+| ------------- | ----- | ---- | ------ | ------- | -------- | ------ |
+| beach         |  80   |   9  |   0    |  18     |  21      |   18   |
+| city          |   0   |  45  |   0    |   0     |   0      |    2   |
+| forest        |   0   |  21  |  80    |   0     |   0      |   13   |
+| highway       |   0   |   4  |   0    |  62     |   0      |   13   |
+| mountain      |   0   |   0  |   0    |   0     |  55      |    0   |
+| office        |   0   |   0  |   0    |   0     |   0      |   34   |
+
+#### Asymmetric
+| Actual Class: | beach | city | forest | highway | mountain | office |
+| ------------- | ----- | ---- | ------ | ------- | -------- | ------ |
+| beach         |  77   |  10  |   0    |  32     |   8      |    3   |
+| city          |   0   |  24  |   0    |   0     |   0      |    4   |
+| forest        |   3   |  44  |  80    |  13     |   2      |   37   |
+| highway       |   0   |   1  |   0    |  31     |   0      |   20   |
+| mountain      |   0   |   0  |   0    |   4     |  66      |    1   |
+| office        |   0   |   0  |   0    |   0     |   0      |   15   |
 
 
 
