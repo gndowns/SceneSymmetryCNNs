@@ -1,9 +1,13 @@
 # Python class to represent Datasets WITHOUT standardized
 # train/test splits, or with a small amount of data
-# (e.g. Toronto 475 images)
-# The data can be loaded all in one batch, and then
-# this class can be used for splitting up the dataset for 
-# k-fold cross validation
+# (namely the Toronto 475 images)
+# This class can be used for loading all the image data in one batch,
+# after which it can be split up the dataset for
+# k-fold cross validation by sklearn.model_selection.StratifiedKFold
+
+# Note the `dataset_str` argument in the constructor can be used to
+# specify different subsets of the data
+# e.g. RGB Images, Intact Line Drawings, Symmetry Splits, etc.
 
 # attribute loader
 import load_data
@@ -13,21 +17,25 @@ import numpy as np
 
 class KFoldDataset:
   def __init__(self, dataset_str):
-    # attribute loader functions for each dataset
-    attr_loaders = {
-      'toronto_line_drawings': load_data.toronto_line_drawings
+    # All Toronto475 datasets have 6 categories
+    self.nb_classes = 6
+    # And 475 samples
+    self.nb_samples = 475
+
+    # select image directory based on specified sub-dataset
+    # each directory should have 6 sub-directories,
+    # containing the images for each class
+
+    # use dictionary to log accepted datasets
+    # dataset: relative/path/to/images/from/root
+    directories = {
+      'rgb': 'data/toronto/rgb',
+      'line_drawings': 'data/toronto/line_drawings',
+      'dR_symmetric': 'data/toronto/dR_symmetric',
+      'dR_asymmetric': 'data/toronto/dR_asymmetric',
+      'dR_weighted': 'data/toronto/dR_weighted'
     }
-
-    attr_loader = attr_loaders[dataset_str]
-
-    # load attributes
-    nb_classes, nb_samples, directory = attr_loader()
-
-    # assign to class
-    self.string = dataset_str
-    self.nb_classes = nb_classes
-    self.nb_samples = nb_samples
-    self.dir = directory
+    self.dir = directories[dataset_str]
 
   # returns X,np array of all data; Y, np array of class labels
   # returns 1 or 3 channels depending if color_mode is rgb or grayscale
