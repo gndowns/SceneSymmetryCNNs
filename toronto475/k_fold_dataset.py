@@ -9,9 +9,6 @@
 # specify different subsets of the data
 # e.g. RGB Images, Intact Line Drawings, Symmetry Splits, etc.
 
-# attribute loader
-import load_data
-
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 

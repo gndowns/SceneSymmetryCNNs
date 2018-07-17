@@ -12,6 +12,10 @@ import numpy as np
 from top_model import bottleneck_features, train_top_model
 from top_conv_block import train_top_conv_block
 
+# fixed seed for reproducibility
+seed = 2018
+np.random.seed(seed)
+
 # global training params
 EPOCHS = 10
 BATCH_SIZE = 16
@@ -21,10 +25,12 @@ COLOR_MODE = 'rgb'
 INPUT_SHAPE = IMG_SIZE + (3,)
 
 
-# implement k-fold cross validation
-def k_fold_cross_val(dataset):
-  # load data
-  X,Y,class_indices = dataset.get_data(IMG_SIZE, COLOR_MODE)
+# train and test with k-fold cross validation
+def train_and_test(datasets):
+  train_dataset = datasets[0]
+
+  # load data for training the model
+  X,Y,class_indices = train_dataset.get_data(IMG_SIZE, COLOR_MODE)
 
   # init 5-fold cross validation
   kfold = StratifiedKFold(n_splits=5, shuffle=True)
@@ -73,12 +79,19 @@ def k_fold_cross_val(dataset):
 
 
 def main():
-  # CHOOSE DATASET HERE
-  dataset_str = 'toronto_line_drawings'
+  # CHOOSE DATASETS HERE
+  # this should be a list of strings of the form
+  # ['train_dataset', 'test_dataset_1', 'test_dataset_2', ...]
+  # A model will be trained on the first dataset
+  # (`train_dataset` here),
+  # the trained model is then tested on each included `test_dataset`
+  # the model will by default always be tested on the `train_dataset`
+  dataset_strs = ['line_drawings']
 
-  # init dataset object
-  dataset = KFoldDataset(dataset_str)
+  # convert from strings to KFoldDataset objects
+  datasets= [KFoldDataset(s) for s in dataset_strs]
 
-  k_fold_cross_val(dataset)
+  train_and_test(datasets)
+
 
 main()
