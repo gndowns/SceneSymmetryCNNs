@@ -13,7 +13,7 @@ from keras.optimizers import SGD
 BATCH_SIZE = 16
 # 100 too much, seems to overfit on Toronto
 #  EPOCHS = 100
-EPOCHS = 50
+EPOCHS = 10
 
 # standard for VGG16
 IMG_SIZE = (224, 224)
