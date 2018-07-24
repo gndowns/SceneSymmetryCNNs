@@ -26,9 +26,9 @@ class MIT67Dataset:
     self.dir = directories[dataset_str]
 
   # Outputs numpy array of all training data
-  def train_data(self, img_size, color_mode):
-    # rescale to 0-1
-    datagen = ImageDataGenerator(rescale=1. / 255)
+  def train_data(self, img_size, color_mode, rescale):
+    # rescale images from typical 0-255 range
+    datagen = ImageDataGenerator(rescale=rescale)
 
     train_gen = datagen.flow_from_directory(
       self.dir + '/train',
@@ -53,8 +53,8 @@ class MIT67Dataset:
     return (X,Y)
 
   # Outputs numpy array of all test data
-  def test_data(self, img_size, color_mode):
-    datagen = ImageDataGenerator(rescale=1. / 255)
+  def test_data(self, img_size, color_mode, rescale):
+    datagen = ImageDataGenerator(rescale=rescale)
     test_gen = datagen.flow_from_directory(
       self.dir + '/test',
       target_size = img_size,
