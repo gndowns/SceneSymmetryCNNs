@@ -20,10 +20,14 @@ class MIT67Dataset:
     # each directory should contain a test/ and train/
     # with 67 category sub directories
     directories = {
-      'rgb': 'data/mit67/rgb'
+      'rgb': 'data/mit67/rgb',
+      'smooth': 'data/mit67/smooth',
+      'smooth_dR_symmetric': 'data/mit67/smooth_dR_symmetric',
+      'smooth_dR_asymmetric': 'data/mit67/smooth_dR_asymmetric'
     }
 
     self.dir = directories[dataset_str]
+    self.str = dataset_str
 
   # Outputs numpy array of all training data
   def train_data(self, img_size, color_mode, rescale):
