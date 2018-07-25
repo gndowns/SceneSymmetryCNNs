@@ -42,6 +42,7 @@ def vgg16_sequential(nb_classes):
 
 # loads pre-trained plcaes205 weights onto Keras model
 # input nb_layers_removable: number of layers to exclude, counting from the top
+# NOTE: these weights have inconsistent behaviour, it is unclear if they're correct
 def places205_vgg16(nb_layers_removable):
   # in order to load the places205 weights, we have to first 
   # build the vgg16 model from scratch, because the Keras 
@@ -95,8 +96,11 @@ def train_top_model(x_train, y_train, x_test, y_test, batch_size, epochs):
 
   # compile with lower learning rate for fine tuning
   model.compile(
-    #  optimizer=RMSprop(lr=1e-5),
-    optimizer=RMSprop(lr=1e-4),
+    #  optimizer='rmsprop',
+    # when the learning rate is higher in this step, 
+    # it screws up training of the whole model later on
+    optimizer=RMSprop(lr=1e-5),
+    #  optimizer=RMSprop(lr=1e-4),
     #  optimizer=RMSprop(lr=1e-3),
     #  optimizer=RMSprop(lr=1e-4, decay=1e-6),
     #  for only training softmax
@@ -124,6 +128,10 @@ def add_top_model(model, nb_classes, input_shape=None):
     model.add(Flatten(input_shape=input_shape))
   model.add(Dense(256, activation='relu'))
   model.add(Dropout(0.5))
+  #  model.add(Dense(1024, activation='relu'))
+  #  model.add(Dropout(0.5))
+  #  model.add(Dense(1024, activation='relu'))
+  #  model.add(Dropout(0.5))
   model.add(Dense(nb_classes, activation='softmax'))
   return model
 
@@ -138,6 +146,7 @@ def train_vgg16(model, x_train, y_train, x_test, y_test, nb_layers_trainable, ba
 
   # compile with SGD and low learning rate
   model.compile(
+    # keras settings
     optimizer=SGD(lr=1e-4, momentum=0.9),
     loss='categorical_crossentropy',
     metrics=['accuracy']
