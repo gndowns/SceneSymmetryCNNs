@@ -21,7 +21,15 @@ def train_and_test(datasets):
   color_mode = 'rgb'
 
   # load data as numpy arrays
-  X,Y,class_indices = train_dataset.get_data(img_size, color_mode)
+  # (use rescale=1 for places CNN's)
+  X,Y = train_dataset.get_data(img_size, color_mode,1)
+  # load testing datasets
+  nb_test_sets = len(datasets[1:])
+  X_test,Y_test = [None]*nb_test_sets, [None]*nb_test_sets
+  for i in range(nb_test_sets):
+    X_test[i],Y_test[i] = datasets[i+1].get_data(img_size, color_mode,1)
+    # generate bottleneck features
+    X_test[i] = model.predict(X_test[i])
 
   # init 5-fold cross validation
   kfold = StratifiedKFold(n_splits=5, shuffle=True)
@@ -34,6 +42,8 @@ def train_and_test(datasets):
 
   # store performance of each fold
   scores = [None] * 5
+  test_scores = [None] * 5
+  for i in range(nb_test_sets): test_scores[i] = [None] * 5
   i=0
   for train_idx, test_idx in kfold.split(X,labels):
     print('fold ' + str(i+1) + ' of 5')
@@ -45,13 +55,28 @@ def train_and_test(datasets):
     # evaluate
     train_score = svc.score(X_bneck[train_idx], labels[train_idx])
     test_score = svc.score(X_bneck[test_idx], labels[test_idx]) 
+    print('evaluating...')
+    print(train_dataset.str)
     print(train_score, test_score)
+
+    for j in range(nb_test_sets):
+      print(datasets[j+1].str)
+      score = svc.score(X_test[j][test_idx], labels[test_idx])
+      print(score)
+      test_scores[j][i] = score
+
 
     scores[i] = test_score
 
     i+=1
 
-  print('mean: ' + str(np.mean(scores)))
+  print('\nMeans:')
+  print(train_dataset.str)
+  print(str(np.mean(scores)))
+  for j in range(nb_test_sets):
+    print(datasets[j+1].str)
+    print(np.mean(test_scores[j]))
+
   print('done')
 
 
@@ -60,7 +85,9 @@ def main():
   # CHOOSE DATASETS HERE
   # the 1st will be used for training,
   # all others will be tested on
-  dataset_strs = ['rgb']
+  #  dataset_strs = ['rgb']
+  #  dataset_strs = ['line_drawings','dR_symmetric', 'dR_asymmetric']
+  dataset_strs = ['line_drawings', 'dR_weighted']
 
   datasets = [KFoldDataset(s) for s in dataset_strs]
 
