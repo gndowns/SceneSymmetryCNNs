@@ -13,3 +13,6 @@ __init__.py
 
 # examples images
 *.png
+
+# SVM logs
+logs/
