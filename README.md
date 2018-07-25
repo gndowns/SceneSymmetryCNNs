@@ -49,13 +49,18 @@ Following the methods of the places2 paper, we used the output of the final full
 We used 5-fold cross validation to train and test this linear svm (SVC(kernel='linear'), no parameters changed) on the bottleneck features output by VGG16_Hybrid_1365.
 VGG16_Hybrid_1365 (from places2 paper) was trained from scratch on both places365 AND ImageNet, and gave the best average performance in the places2 trials.
 
-| Dataset        | Linear SVC % Accuracy (mean over 5 folds) |
-| -------------- | ----------------------------------------- |
-| RGB            |  |
-| Intact         |  | 
-| Symmetric 50%  |  |
-| Asymmetric 50% |  |
-| Three Channel  |  |
+| Dataset         | Linear SVC % Accuracy (mean over 5 folds) |
+| --------------  | ----------------------------------------- |
+| RGB                                 | 98.52 |
+| Intact                              | 86.53 | 
+| Symmetric 50%  (trained on intact)  | 63.57 |
+| Asymmetric 50% (trained on intact)  | 48.61 |
+| Intact+Sym+Asym                     | 93.90 |
+| arc length grayscale (train + test) | 90.12 |
+| a.l. grayscale (trained on intact)  | 63.39 |  
+| intact + a.l. gray + d.a.l. gray    | 94.53 |
+
+(a.l. is 'arc length' and d.a.l. is 'derivative of arc length'. See the paper for definitions of these measures)
 
 
 ### Fine-Tuned VGG16 Results
