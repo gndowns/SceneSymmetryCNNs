@@ -43,6 +43,22 @@ Note the columns are cumulative, so `Top Convolution Block` indicates the Top De
 
 ## Toronto -- 475 Artist Line Drawings
 Since the dataset is small and there is no well defined train/test split the experiments were re-run with 5-fold cross validation, leaving about 16 images per class per fold.
+
+### SVM Results
+Following the methods of the places2 paper, we used the output of the final fully connected layer of VGG16 (fc7, before the softmax classifier), as input to an SVM.
+We used 5-fold cross validation to train and test this linear svm (SVC(kernel='linear'), no parameters changed) on the bottleneck features output by VGG16_Hybrid_1365.
+VGG16_Hybrid_1365 (from places2 paper) was trained from scratch on both places365 AND ImageNet, and gave the best average performance in the places2 trials.
+
+| Dataset        | Linear SVC % Accuracy (mean over 5 folds) |
+| -------------- | ----------------------------------------- |
+| RGB            |  |
+| Intact         |  | 
+| Symmetric 50%  |  |
+| Asymmetric 50% |  |
+| Three Channel  |  |
+
+
+### Fine-Tuned VGG16 Results
 For each fold, the top fully connected classifer was first trained independently on the feature maps output by the VGG16 convolutional base; this top model was then trained together with the top convolutional block of VGG16. Top-1 accuracy was measured on the heldout testing set.
 The confusion matrices from each fold were combined to give the final full confusion matrix.
 
