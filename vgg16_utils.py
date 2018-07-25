@@ -8,6 +8,7 @@
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Flatten
 from keras.optimizers import RMSprop, SGD
+from vgg16_hybrid_places_1365 import VGG16_Hybrid_1365
 
 # returns VGG16 architecture as sequential model, w/ specified number of classes in the last layer
 def vgg16_sequential(nb_classes):
@@ -39,6 +40,20 @@ def vgg16_sequential(nb_classes):
 
   return model
 
+
+# loads vgg16 pre-trained on Places365 AND ImageNet
+# removes specified number of layers from the top 
+def vgg16_hybrid_1365(nb_layers_removable):
+  # load pre-trained model
+  hybrid = VGG16_Hybrid_1365()
+  # load VGG16 as Sequential model
+  model = vgg16_sequential(1365)
+  # copy hybrid weights to sequential model
+  model.set_weights(hybrid.get_weights())
+  # remove specified number of layers
+  for _ in range(nb_layers_removable): model.pop()
+
+  return model
 
 # loads pre-trained plcaes205 weights onto Keras model
 # input nb_layers_removable: number of layers to exclude, counting from the top

@@ -1,12 +1,21 @@
 # Top level script for training and testing on the MIT67 dataset
 
 from mit67_dataset import MIT67Dataset
-from vgg16_utils import places205_vgg16, train_top_model, add_top_model, train_vgg16
+from vgg16_utils import places205_vgg16, train_top_model, add_top_model, train_vgg16, vgg16_sequential, vgg16_hybrid_1365
 import numpy as np
 
 
 # Fine tune vgg16 for specified datasets
 def train_and_test(datasets):
+  # import vgg16 base with places weights
+  # (exclude top 4 layers (dense & flatten)) 
+  #  model = places205_vgg16(4)
+  model = vgg16_hybrid_1365(4)
+  
+
+  # variable
+  batch_size = 16
+  
   # use first listed dataset for training
   train_dataset = datasets[0]
 
@@ -14,13 +23,6 @@ def train_and_test(datasets):
   img_size = (224,224)
   # 3 channels for vgg16 compatibility
   color_mode = 'rgb'
-  # variable
-  batch_size = 16
-
-  # NEW outline
-  # import vgg16 base with places weights
-  # (exclude top 4 layers (dense & flatten)) 
-  model = places205_vgg16(4)
 
   # generate numpy arrays of all data
   # use rescale=1 to match places conventions
@@ -38,11 +40,9 @@ def train_and_test(datasets):
     verbose=1
   )
 
+  # TRAINING/TESTING
   # train on bottleneck features
-  #  epochs = 300
-  #  epochs = 50
-  # don't over-train top model
-  epochs = 25
+  epochs = 50
   top_model_weights = train_top_model(
     bneck_train, y_train,
     bneck_test, y_test,
@@ -61,7 +61,8 @@ def train_and_test(datasets):
 
   # freeze all layers except top conv block and dense layers
   nb_layers_trainable = 8
-  epochs = 25
+  epochs = 10
+  #  epochs = 100
   # train all layers together
   model = train_vgg16(model,
     x_train, y_train,
