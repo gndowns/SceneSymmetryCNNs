@@ -30,15 +30,17 @@ class KFoldDataset:
       'line_drawings': 'data/toronto/line_drawings',
       'dR_symmetric': 'data/toronto/dR_symmetric',
       'dR_asymmetric': 'data/toronto/dR_asymmetric',
-      'dR_weighted': 'data/toronto/dR_weighted'
+      'dR_weighted': 'data/toronto/dR_weighted',
+      'd2R_weighted': 'data/toronto/d2R_weighted'
     }
     self.dir = directories[dataset_str]
+    self.str = dataset_str
 
   # returns X,np array of all data; Y, np array of class labels
   # returns 1 or 3 channels depending if color_mode is rgb or grayscale
-  def get_data(self, img_size, color_mode):
-    # rescale 0-255 pixel values to 0-1
-    datagen = ImageDataGenerator(rescale=1./255)
+  def get_data(self, img_size, color_mode, rescale):
+    # rescale 0-255 pixel values by given factor
+    datagen = ImageDataGenerator(rescale=rescale)
 
     generator = datagen.flow_from_directory(
       self.dir,
@@ -50,9 +52,6 @@ class KFoldDataset:
       color_mode = color_mode
     )
     
-    # mapping of class labels to indices
-    class_indices = generator.class_indices
-
     nb_channels = 3 if color_mode=='rgb' else 1
 
     # init arrays to hold data and labels
@@ -63,5 +62,5 @@ class KFoldDataset:
     for i in range(self.nb_samples):
       X[i], Y[i] = next(generator)
 
-    return (X, Y, class_indices)
+    return (X, Y)
 
