@@ -115,6 +115,7 @@ All demos are run with:
 
 Run in Ubuntu 14.04.5 wthinin a virtual environment (see [TF docs](https://www.tensorflow.org/install/install_linux))
 
-## Relevant Resources
+## References
 - https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html  
+- http://places2.csail.mit.edu/ 
 
