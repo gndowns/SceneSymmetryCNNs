@@ -43,7 +43,7 @@ def vgg16_sequential(nb_classes):
 
 # loads vgg16 pre-trained on Places365 AND ImageNet
 # removes specified number of layers from the top 
-def vgg16_hybrid_1365(nb_layers_removable):
+def vgg16_hybrid_1365(nb_layers_removable=0):
   # load pre-trained model
   hybrid = VGG16_Hybrid_1365()
   # load VGG16 as Sequential model

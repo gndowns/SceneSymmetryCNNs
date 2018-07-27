@@ -62,6 +62,19 @@ VGG16_Hybrid_1365 (from places2 paper) was trained from scratch on both places36
 
 (a.l. is 'arc length' and d.a.l. is 'derivative of arc length'. See the paper for definitions of these measures)
 
+### Fine Tuning Softmax of VGG16_Hybrid_1365
+In this experiment we replace only the softmax layer of vgg16_hybrid_1365, then train all layers together.
+In all cases the optimizer is `SGD(lr=1e-3, decay=1e-6, momentum=0.9, nesterov=True)`.
+For RGB and line drawings, we train for 5 epochs only. The model converges/overfits very quickly, these results could probably be improved with a lower learning rate and logner training time; but this is really just a proof of concept, I did not try to hyper-optimize these numbers.
+
+| Dataset       | Top-1 % Accuracy |
+| ------------- | ---------------- |
+| RGB           | 98.73            |
+| Line Drawings | 89.02            |
+
+It is worth noting the Line Drawing performance is not as good as when we re-train new Dense layers from scratch. This suggests the Dense layers, pre-trained for RGB images, are not very malleable; for good performance on new feature channels (line drawings, line drawings + symmetry splits) we should always instantiate new Dense layers and train them from scratch.
+
+The 3-channel setup (line drawings + symmetric + asymmetric) did not work very well under this setup at all. On some folds the performance did not improve at all, no matter how many epochs. Again, for radically new channel setups the Dense layers should be re-trained from scratch (and with fewer neurons).
 
 ### Fine-Tuned VGG16 Results
 For each fold, the top fully connected classifer was first trained independently on the feature maps output by the VGG16 convolutional base; this top model was then trained together with the top convolutional block of VGG16. Top-1 accuracy was measured on the heldout testing set.
