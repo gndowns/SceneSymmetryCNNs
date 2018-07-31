@@ -13,12 +13,16 @@ IMG_SIZE = (224,224)
 
 def train_and_test():
   # load intact line drawings
-  intact_dataset = KFoldDataset('toronto_line_drawings')
+  intact_dataset = KFoldDataset('line_drawings')
   X_intact, Y_intact,class_indices = intact_dataset.get_data(IMG_SIZE, 'grayscale')
 
   # load dR weighted grayscale drawings
-  weighted_dataset = KFoldDataset('toronto_dR_weighted')
-  X_weighted,Y_weighted,class_indices = weighted_dataset.get_data(IMG_SIZE, 'grayscale')
+  #  weighted_dataset = KFoldDataset('toronto_dR_weighted')
+  #  X_weighted,Y_weighted,class_indices = weighted_dataset.get_data(IMG_SIZE, 'grayscale')
+  symmetric_dataset = KFoldDataset('dR_symmetric')
+  X_sym, Y_sym, class_indices= symmetric_dataset.get_data(IMG_SIZE, 'grayscale')
+  asymmetric_dataset = KFoldDataset('dR_asymmetric')
+  X_asym, Y_asym, class_indices= asymmetric_dataset.get_data(IMG_SIZE, 'grayscale')
 
   # init 5-fold cross validation
   kfold = StratifiedKFold(n_splits=5, shuffle=True)
@@ -28,7 +32,9 @@ def train_and_test():
 
   # put each dataset in respective channels
   X[:,:,:,0] = X_intact.squeeze()
-  X[:,:,:,1] = X_weighted.squeeze()
+  #  X[:,:,:,1] = X_weighted.squeeze()
+  #  X[:,:,:,1] = X_sym.squeeze()
+  X[:,:,:,1] = X_asym.squeeze()
 
   # convert ground-truth one-hot encodings to class labels
   labels = [np.argmax(y) for y in Y_intact]

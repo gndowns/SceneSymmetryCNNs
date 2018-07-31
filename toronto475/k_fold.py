@@ -2,7 +2,6 @@
 # First tunes top dense layers, then 
 # top layers with convolutional layers all together
 
-
 from k_fold_dataset import KFoldDataset
 #  import load_models
 from sklearn.model_selection import StratifiedKFold
@@ -30,7 +29,9 @@ def train_and_test(datasets):
   train_dataset = datasets[0]
 
   # load data for training the model
-  X,Y,class_indices = train_dataset.get_data(IMG_SIZE, COLOR_MODE)
+  # use imagenet rescaling
+  X,Y = train_dataset.get_data(IMG_SIZE, COLOR_MODE, 1. / 255)
+  import pdb; pdb.set_trace()
 
   # init 5-fold cross validation
   kfold = StratifiedKFold(n_splits=5, shuffle=True)
@@ -67,6 +68,9 @@ def train_and_test(datasets):
 
     # append accuracy score only
     scores.append(score[1])
+
+    # try visualization here
+    import pdb; pdb.set_trace()
 
     # clear tensorflow memory
     K.clear_session()
