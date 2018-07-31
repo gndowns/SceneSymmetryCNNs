@@ -1,6 +1,6 @@
 # Visualize activations in pre-trained hybrid VGG16
-from vis.visualization import visualize_saliency, visualize_activation
-from PIL import Image
+from vis.visualization import visualize_activation
+from scipy.misc import imsave
 import numpy as np
 from vgg16_utils import vgg16_hybrid_1365
 
@@ -17,8 +17,10 @@ layer_idx = 19
 
 # generate activations for some filters at specified layer
 for i in range(32):
+  print(i)
   activation = visualize_activation(model, layer_idx, i)
-  img = Image.fromarray(activation)
   # name: layer_idx, filter_idx
-  img.save('vgg16_activations/activation_' + str(layer_idx) + '_' + str(i) + '.png')
+  imsave(('vgg16_hybrid_1365_activations/' +
+    'act_' + str(layer_idx) + '_' + str(i) + '.png'),
+    activation)
 
