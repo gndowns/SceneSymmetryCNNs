@@ -9,6 +9,8 @@ from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Flatten
 from keras.optimizers import RMSprop, SGD
 from vgg16_hybrid_places_1365 import VGG16_Hybrid_1365
+from vgg16_places_365 import VGG16_Places365
+
 
 # returns VGG16 architecture as sequential model, w/ specified number of classes in the last layer
 def vgg16_sequential(nb_classes):
@@ -54,6 +56,19 @@ def vgg16_hybrid_1365(nb_layers_removable=0):
   for _ in range(nb_layers_removable): model.pop()
 
   return model
+
+# vgg16 pre-trained on only Places365
+def vgg16_places365(nb_layers_removable=0):
+  places = VGG16_Places365()
+  # load vgg16 as sequential model 
+  model = vgg16_sequential(365)
+  # copy places weights to sequential model
+  model.set_weights(places.get_weights())
+  # remove specified layers
+  for _ in range(nb_layers_removable): model.pop()
+
+  return model
+
 
 # loads pre-trained plcaes205 weights onto Keras model
 # input nb_layers_removable: number of layers to exclude, counting from the top
@@ -103,7 +118,7 @@ def places205_vgg16(nb_layers_removable):
 
 
 # Trains new top dense layers on bottleneck features output by vgg16 base
-def train_top_model(x_train, y_train, x_test, y_test, batch_size, epochs):
+def train_top_model(x_train, y_train, x_test, y_test, batch_size, epochs, lr):
   # load top model architecture
   model = Sequential()
   # get input shape & nb_classes from given data
@@ -111,10 +126,11 @@ def train_top_model(x_train, y_train, x_test, y_test, batch_size, epochs):
 
   # compile with lower learning rate for fine tuning
   model.compile(
+    optimizer=RMSprop(lr=lr),
     #  optimizer='rmsprop',
     # when the learning rate is higher in this step, 
     # it screws up training of the whole model later on
-    optimizer=RMSprop(lr=1e-5),
+    #  optimizer=RMSprop(lr=1e-5),
     #  optimizer=RMSprop(lr=1e-4),
     #  optimizer=RMSprop(lr=1e-3),
     #  optimizer=RMSprop(lr=1e-4, decay=1e-6),
