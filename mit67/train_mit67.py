@@ -3,6 +3,7 @@
 from mit67_dataset import MIT67Dataset
 from vgg16_utils import places205_vgg16, train_top_model, add_top_model, train_vgg16, vgg16_sequential, vgg16_hybrid_1365
 import numpy as np
+from keras.preprocessing.image import ImageDataGenerator
 
 
 # Fine tune vgg16 for specified datasets
@@ -30,23 +31,19 @@ def train_and_test(datasets):
   x_test, y_test = train_dataset.test_data(img_size, color_mode, 1)
 
   # calculate bottleneck features (output of vgg conv layers)
-  bneck_train = model.predict(x_train,
-    batch_size = batch_size,
-    verbose=1
-  )
+  bneck_train = model.predict(x_train)
 
-  bneck_test = model.predict(x_test,
-    batch_size = batch_size,
-    verbose=1
-  )
+  bneck_test = model.predict(x_test)
 
   # TRAINING/TESTING
   # train on bottleneck features
   epochs = 50
+  lr = 1e-5
   top_model_weights = train_top_model(
     bneck_train, y_train,
     bneck_test, y_test,
-    batch_size, epochs
+    batch_size, epochs,
+    lr
   )
 
   # get model base weights
@@ -79,7 +76,7 @@ def train_and_test(datasets):
 
   print(score)
 
-
+  return model
 
 
 
@@ -91,11 +88,16 @@ def main():
   # (`train_dataset` here),
   # the trained model is then tested on each included `test_dataset`
   # the model will by default always be tested at least on the `train_dataset`
-  dataset_strs = ['rgb']
+  #  dataset_strs = ['rgb']
+  dataset_strs = ['smooth']
 
   # convert from strings to Dataset objects
   datasets = [MIT67Dataset(s) for s in dataset_strs]
 
-  train_and_test(datasets)
+  model = train_and_test(datasets)
+
+  # save model for later
+  model.save('models/vgg16_hybrid_1365_mit67_' + dataset_strs[0] +'.h5')
   
+
 main()
