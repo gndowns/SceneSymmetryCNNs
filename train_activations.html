@@ -1,0 +1,27 @@
+<div id='images'>
+</div>
+
+<script>
+// insert one layer/filter at a time, horizontally from epoch 0 to 5
+// indices of layers and filters
+var indices = [[0,11],[1,17],[3,10],[4,9],[6,16],[7,1],[8,12],
+  [10,25],[11,22],[12,21],[14,21],[15,17],[16,2],[19,2],
+  [20,15],[21,7]
+]
+for(i=0; i<indices.length; i++){
+  var div = document.getElementById('images');
+  for(j=0; j<=5; j++){
+    var img = document.createElement('img');
+
+    var layer_idx = indices[i][0];
+    var filter_idx = indices[i][1];
+
+    img.src = 'mit67_smooth_train_activations/act_' +
+      layer_idx + '_' + filter_idx + '_' + j + '.png';
+    img.style.width = '10%';
+    div.appendChild(img);
+  }
+  // newline
+  div.innerHTML += "<br>"
+}
+</script>
