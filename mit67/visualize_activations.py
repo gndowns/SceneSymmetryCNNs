@@ -18,18 +18,26 @@ def main():
   # use first dense layer
   #  layer_idx = 19
   # first conv layer
-  layer_idx = 0
-  nb_filters = 64
-  
-  # generate activations for first 32 neurons
-  for i in range(nb_filters):
-    print(i)
-    act = visualize_activation(model, layer_idx, i).squeeze()
+  #  layer_idx = 0
 
-    # directory to save images to
-    dir_name = 'mit67_' + dataset_str + '_activations/'
+  # visualize all convolutional & fully connected layers
+  layer_indices = [0,1,3,4,6,7,8,10,11,12,14,15,16,19,20,21]
 
-    imsave(dir_name + 'act_' + str(layer_idx) + '_' + str(i) + '.png', 
-      act)
+  nb_filters = 32
+
+  # for each layer, iterate over nb_filters many filters
+  for layer_idx in layer_indices:
+    print('layer: ' + str(layer_idx))
+    for filter_idx in range(nb_filters):
+      print('filter: ' + str(filter_idx))
+      act = visualize_activation(model, layer_idx, filter_idx).squeeze()
+
+      # directory to save images to
+      dir_name = 'mit67_' + dataset_str + '_activations/'
+
+      imsave((dir_name + 'act_' + str(layer_idx) +
+        '_' + str(filter_idx) + '.png'),
+        act
+      )
 
 main()
