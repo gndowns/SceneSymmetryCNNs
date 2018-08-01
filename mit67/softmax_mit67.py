@@ -2,20 +2,23 @@
 # Then use re-trained network for an SVM
 
 from mit67_dataset import MIT67Dataset
-from vgg16_utils import places205_vgg16
+from vgg16_utils import vgg16_hybrid_1365
 from keras.layers import Dense
 from keras.optimizers import SGD
+import numpy as np
+
+np.random.seed(2018)
 
 def train_and_test(train_dataset):
-  # import places205_vgg16 w/o top softmax layer
-  model = places205_vgg16(1)
+  # load vgg16 w/o top layer
+  model = vgg16_hybrid_1365(1)
 
   # replace with our own softmax layer
   model.add(Dense(train_dataset.nb_classes, activation='softmax'))
 
   # freeze everything but top conv block & dense layers
-  for l in model.layers[:-8]:
-    l.trainable = False
+  #  for l in model.layers[:-8]:
+    #  l.trainable = False
 
   # standard image size for vgg16
   img_size = (224,224)
@@ -34,16 +37,23 @@ def train_and_test(train_dataset):
   )
 
   model.fit(x_train, y_train,
-    epochs = 50,
-    batch_size = 16,
+    # Each epoch takes about a minute, converges very fast
+    epochs = 5,
+    batch_size = 32,
     validation_data = (x_test, y_test)
   )
+
+  return model
 
 
 
 def main():
-  dataset_str = 'rgb'
+  #  dataset_str = 'rgb'
+  dataset_str = 'smooth'
   dataset = MIT67Dataset(dataset_str)
-  train_and_test(dataset)
+  model = train_and_test(dataset)
+
+  model.save('models/vgg16_hybrid_1365_softmax_mit67_' + dataset_str + '.h5')
+
 
 main()
