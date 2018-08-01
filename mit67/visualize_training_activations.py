@@ -15,11 +15,13 @@ def visualize(model, epoch, dataset):
   # selected layer & filter indices
   # includes all conv & dense layers
   # and 1 random filter per layer
-  indices = [(0,11), (1,17), (3,10), (4,9),
-    (6,16), (7,1), (8,12), (10,25), (11,22),
-    (12,21), (14,21), (15, 17), (16,2),
-    (19,2), (20,15), (21,7)
-  ]
+  #  indices = [(0,11), (1,17), (3,10), (4,9),
+    #  (6,16), (7,1), (8,12), (10,25), (11,22),
+    #  (12,21), (14,21), (15, 17), (16,2),
+    #  (19,2), (20,15), (21,7)
+  #  ]
+  # 4 specific cases from email
+  indices = [(19,7),(19,14),(19,22),(19,23)]
   for layer_idx,filter_idx in indices:
     print(layer_idx, filter_idx)
     act = visualize_activation(model,layer_idx,filter_idx).squeeze()
