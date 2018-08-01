@@ -16,3 +16,6 @@ __init__.py
 
 # SVM logs
 logs/
+
+# specific training activation examples
+!mit67_smooth_train_activations/*.png

@@ -1,0 +1,16 @@
+<img src='mit67_smooth_train_activations/act_0_11_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_1_17_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_3_10_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_4_9_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_6_16_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_7_1_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_8_12_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_10_25_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_11_22_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_12_21_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_14_21_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_15_17_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_16_2_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_19_2_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_20_15_0.png' width=9.9%/>
+<img src='mit67_smooth_train_activations/act_21_7_0.png' width=9.9%/>
