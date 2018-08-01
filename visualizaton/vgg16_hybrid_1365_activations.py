@@ -10,13 +10,17 @@ np.random.seed(2018)
 model = vgg16_hybrid_1365()
 
 # first dense layer
-layer_idx = 19
+#  layer_idx = 19
+# first conv layer
+layer_idx = 0
+
+nb_filters = 64
 
 # generate activations for all filters
 #  activation = visualize_activation(model, layer_idx)
 
 # generate activations for some filters at specified layer
-for i in range(32):
+for i in range(nb_filters):
   print(i)
   activation = visualize_activation(model, layer_idx, i)
   # name: layer_idx, filter_idx

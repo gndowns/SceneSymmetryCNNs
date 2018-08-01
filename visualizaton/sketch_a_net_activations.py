@@ -10,14 +10,15 @@ np.random.seed(2018)
 model = sketch_a_net()
 
 #  first dense layer
-layer_idx = 9
+#  layer_idx = 9
 # second dense layer
 #  layer_idx = 11
 #  first conv layer
-#  layer_idx = 0
+layer_idx = 0
+nb_filters = 64
 
 # visualize first 64 filters
-for i in range(64):
+for i in range(nb_filters):
   print(i)
   activation = visualize_activation(model, layer_idx, i).squeeze()
   imsave('sketch_a_net_activations/act_' + str(layer_idx) + '_' + str(i) + '.png',
