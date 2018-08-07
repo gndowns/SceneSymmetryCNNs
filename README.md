@@ -46,7 +46,7 @@ Since the dataset is small and there is no well defined train/test split the exp
 
 ### SVM Results
 Following the methods of the places2 paper, we used the output of the final fully connected layer of VGG16 (fc7, before the softmax classifier), as input to an SVM.
-We used 5-fold cross validation to train and test this linear svm (SVC(kernel='linear'), no parameters changed) on the bottleneck features output by VGG16_Hybrid_1365.
+We used 5-fold cross validation to train and test this linear svm (`SVC(kernel='linear'`, no parameters changed) on these bottleneck features output by VGG16_Hybrid_1365.
 VGG16_Hybrid_1365 (from places2 paper) was trained from scratch on both places365 AND ImageNet, and gave the best average performance in the places2 trials.
 
 | Dataset         | Linear SVC % Accuracy (mean over 5 folds) |
@@ -61,6 +61,22 @@ VGG16_Hybrid_1365 (from places2 paper) was trained from scratch on both places36
 | intact + a.l. gray + d.a.l. gray    | 94.53 |
 
 (a.l. is 'arc length' and d.a.l. is 'derivative of arc length'. See the paper for definitions of these measures)
+
+#### 3-Channel Configurations
+In the above experiment, combining intact + arc-length grayscale + derivative-arc-length grayscale has the best performance outside of RGB. Three channels are required for VGG16, however It's unclear if both the arc-length and derivative-arc-length measures are needed. 
+We repeat the same SVM experiment here with different 3-channel configurations of these grayscale weighted line drawings. The setup is the same as above otherwise.
+
+| Dataset         | Linear SVC % Accuracy (mean over 5 folds) |
+| --------------  | ----------------------------------------- |
+| intact + arc-length + d-arc-length          | 94.53 |
+| intact + arc-length + arc-length            | 93.05 |  
+| intact + intact + arc-length                | 91.37 |
+| intact + d-arc-length + d-arc-length        | 93.47 |
+| intact + intact + d-arc-length              | 92.85 |
+
+The channels are listed in R-G-B order with respect to the original VGG16 channels.
+Using both measures gives the best performance, but the difference between these setups is marginal. Any inclusion of the grayscale weights provides a significant boost above just intact line drawings.
+
 
 ### Fine Tuning Softmax of VGG16_Hybrid_1365
 In this experiment we replace only the softmax layer of vgg16_hybrid_1365, then train all layers together.
