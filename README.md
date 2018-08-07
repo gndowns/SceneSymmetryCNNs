@@ -62,6 +62,8 @@ VGG16_Hybrid_1365 (from places2 paper) was trained from scratch on both places36
 
 (a.l. is 'arc length' and d.a.l. is 'derivative of arc length'. See the paper for definitions of these measures)
 
+<br>
+
 #### 3-Channel Configurations
 In the above experiment, combining intact + arc-length grayscale + derivative-arc-length grayscale has the best performance outside of RGB. Three channels are required for VGG16, however It's unclear if both the arc-length and derivative-arc-length measures are needed. 
 We repeat the same SVM experiment here with different 3-channel configurations of these grayscale weighted line drawings. The setup is the same as above otherwise.
@@ -77,6 +79,24 @@ We repeat the same SVM experiment here with different 3-channel configurations o
 The channels are listed in R-G-B order with respect to the original VGG16 channels.
 Using both measures gives the best performance, but the difference between these setups is marginal. Any inclusion of the grayscale weights provides a significant boost above just intact line drawings.
 
+<br>
+
+#### Channel Ordering
+The original 3 channels of VGG16 are Red-Green-Blue. It's unclear in the above experiment if the ordering of the new channels is relevant to performance. Certain features may be better highlighted by different color channels. We repeat the same SVM experiments here with different channel orderings.
+
+
+| Dataset         | Linear SVC % Accuracy (mean over 5 folds) |
+| --------------  | ----------------------------------------- |
+| intact + arc-length + d-arc-length          | 94.53 |
+| intact + d-arc-length + arc-length          | 94.32 |  
+| arc-length + intact + d-arc-length          | 92.41 |
+| arc-length + d-arc-length + intact          | 94.95 |
+| d-arc-length + intact + arc-length          | 92.83 |
+| d-arc-length + arc-length + intact          | 94.10 |
+
+There is some difference in performance, but only by 1-2%. arc-length + intact + d-arc-length has the best performance, it is unclear why. Maybe an artifact of the distribution of colors in the original dataset, and the types of features being highlighted by each of these saliency measures.
+
+<br>
 
 ### Fine Tuning Softmax of VGG16_Hybrid_1365
 In this experiment we replace only the softmax layer of vgg16_hybrid_1365, then train all layers together.

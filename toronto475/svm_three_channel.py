@@ -71,7 +71,12 @@ def main():
   #  dataset_strs = ['line_drawings', 'dR_weighted', 'dR_weighted']
   #  dataset_strs = ['line_drawings', 'line_drawings', 'dR_weighted']
   #  dataset_strs = ['line_drawings', 'd2R_weighted', 'd2R_weighted']
-  dataset_strs = ['line_drawings', 'line_drawings', 'd2R_weighted']
+  #  dataset_strs = ['line_drawings', 'line_drawings', 'd2R_weighted']
+  #  dataset_strs = ['line_drawings', 'd2R_weighted', 'dR_weighted']
+  #  dataset_strs = ['dR_weighted', 'line_drawings', 'd2R_weighted']
+  #  dataset_strs = ['dR_weighted', 'd2R_weighted', 'line_drawings']
+  #  dataset_strs = ['d2R_weighted', 'line_drawings', 'dR_weighted']
+  dataset_strs = ['d2R_weighted', 'dR_weighted', 'line_drawings']
 
 
   datasets = [KFoldDataset(s) for s in dataset_strs]
