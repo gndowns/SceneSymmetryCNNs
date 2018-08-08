@@ -46,7 +46,7 @@ Since the dataset is small and there is no well defined train/test split the exp
 
 ### SVM Results
 Following the methods of the places2 paper, we used the output of the final fully connected layer of VGG16 (fc7, before the softmax classifier), as input to an SVM.
-We used 5-fold cross validation to train and test this linear svm (`SVC(kernel='linear'`, no parameters changed) on these bottleneck features output by VGG16_Hybrid_1365.
+We used 5-fold cross validation to train and test this linear svm (`SVC(kernel='linear')`, no parameters changed) on these bottleneck features output by VGG16_Hybrid_1365.
 VGG16_Hybrid_1365 (from places2 paper) was trained from scratch on both places365 AND ImageNet, and gave the best average performance in the places2 trials.
 
 | Dataset         | Linear SVC % Accuracy (mean over 5 folds) |
