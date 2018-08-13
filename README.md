@@ -115,6 +115,15 @@ The confusion matrices from each fold were combined to give the final full confu
 
 
 ## MIT67
+
+### SVM
+This experiment uses the same setup as the SVM above, but with MIT67
+
+| Dataset         | Linear SVC % Accuracy |
+| --------------  | --------------------- |
+| RGB                     | 71.17 |
+| Intact                  | 27.78 | 
+
 We fine tuned VGG16 for the MIT67 smoothed computer generated line drawings (`mit67_smooth` in the code) by first individually training the top dense layers on the bottleneck features output by the vgg convolutional base; then re-training the entire network, including all vgg convolutional layers and our top model together.
 Below are the results of this trained model tested on several different splits.
 
