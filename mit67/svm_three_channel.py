@@ -60,9 +60,7 @@ def train_and_test(datasets):
 
 def main():
   # CHOOSE 3 datasets
-  #  dataset_strs = ['line_drawings', 'dR_symmetric', 'dR_asymmetric']
-  #  dataset_strs = ['line_drawings', 'dR_weighted', 'd2R_weighted']
-  dataset_strs = ['smooth', 'dR_weighted', 'dR_weighted']
+  dataset_strs = ['smooth', 'dR_weighted', 'd2R_weighted']
   #  dataset_strs = ['line_drawings', 'line_drawings', 'dR_weighted']
   #  dataset_strs = ['line_drawings', 'd2R_weighted', 'd2R_weighted']
   #  dataset_strs = ['line_drawings', 'line_drawings', 'd2R_weighted']
