@@ -125,6 +125,7 @@ This experiment uses the same setup as the SVM above, but with MIT67
 | intact                  | 27.78 | 
 | symmetric 50%  (trained on intact)  | 8.36 |
 | asymmetric 50% (trained on intact)  | 4.85 |
+| intact + arc-length + d-arc-length  | 26.29 |
 
 
 We fine tuned VGG16 for the MIT67 smoothed computer generated line drawings (`mit67_smooth` in the code) by first individually training the top dense layers on the bottleneck features output by the vgg convolutional base; then re-training the entire network, including all vgg convolutional layers and our top model together.
