@@ -23,7 +23,8 @@ class MIT67Dataset:
       'rgb': 'data/mit67/rgb',
       'smooth': 'data/mit67/smooth',
       'smooth_dR_symmetric': 'data/mit67/smooth_dR_symmetric',
-      'smooth_dR_asymmetric': 'data/mit67/smooth_dR_asymmetric'
+      'smooth_dR_asymmetric': 'data/mit67/smooth_dR_asymmetric',
+      'dR_weighted': 'data/mit67/dR_weighted'
     }
 
     self.dir = directories[dataset_str]
