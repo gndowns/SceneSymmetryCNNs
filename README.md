@@ -127,9 +127,24 @@ This experiment uses the same setup as the SVM above, but with MIT67
 | asymmetric 50% (trained on intact)  | 4.85 |
 | intact + arc-length + d-arc-length  | 26.29 |
 
+### Replacing Softmax
+This experiment follows the same setup as 'softmax' above: we replace the final dense softmax layer and re-train the entire network together with `SGD(lr=1e-3, decay=1e-6, momentum=0.9, nesterov=True)`.
+RGB is trained for 5 epochs. All others are trained for 10.
+Since Tensorflow-GPU results are not easily reproducible, we train and test each dataset 5 times and report the mean top-1 accuracy.
 
+| Dataset         | Mean Accuracy |
+| --------------  | -------------------- |
+| RGB                   | 74.38 |
+| intact                | 42.24 |
+| arc-length symmetric  | 17.54 |
+| arc-length asymmetric |  5.38 |
+| intact + a.l. + d.a.l | 45.59 |
+
+
+### Fine Tuning New Dense Layers
 We fine tuned VGG16 for the MIT67 smoothed computer generated line drawings (`mit67_smooth` in the code) by first individually training the top dense layers on the bottleneck features output by the vgg convolutional base; then re-training the entire network, including all vgg convolutional layers and our top model together.
 Below are the results of this trained model tested on several different splits.
+
 
 ### Ribbon Symmetry Splits (dR)
 

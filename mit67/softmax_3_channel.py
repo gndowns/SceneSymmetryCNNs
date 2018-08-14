@@ -4,22 +4,12 @@ from mit67_dataset import MIT67Dataset
 from vgg16_utils import vgg16_hybrid_1365
 from keras.layers import Dense
 from keras.optimizers import SGD
+from keras import backend as K
 import numpy as np
 
 def train_and_test(datasets):
   train_dataset = datasets[0]
 
-  model = vgg16_hybrid_1365(1)
-
-  # append new softmax layer
-  model.add(Dense(train_dataset.nb_classes, activation='softmax'))
-
-  # fine tuning stats
-  model.compile(
-    optimizer=SGD(lr=1e-3,decay=1e-6,momentum=0.9,nesterov=True),
-    loss='categorical_crossentropy',
-    metrics=['accuracy']
-  )
 
   img_size = (224,224)
   color_mode = 'grayscale'
@@ -46,17 +36,36 @@ def train_and_test(datasets):
   y_train = y1_train
   y_test = y1_test
 
+  # train 5 times and take the mean
+  scores = [None] * 5
+  for i in range(5):
+    print('trial ' + str(i+1) + ' of 5')
 
-  model.fit(x_train, y_train,
-    batch_size = 32,
-    # converges very quickly, but takes more time than intact
-    epochs = 10,
-    validation_data = (x_test, y_test)
-  )
+    model = vgg16_hybrid_1365(1)
 
-  score = model.evaluate(x_test,y_test)
-  print(score)
+    # append new softmax layer
+    model.add(Dense(train_dataset.nb_classes, activation='softmax'))
 
+    # fine tuning stats
+    model.compile(
+      optimizer=SGD(lr=1e-3,decay=1e-6,momentum=0.9,nesterov=True),
+      loss='categorical_crossentropy',
+      metrics=['accuracy']
+    )
+
+    model.fit(x_train, y_train,
+      batch_size = 32,
+      # converges very quickly, but takes more time than intact
+      epochs = 10,
+      validation_data = (x_test, y_test)
+    )
+
+    scores[i] = model.evaluate(x_test,y_test)[1]
+
+    K.clear_session()
+
+  print(scores)
+  print(np.mean(scores))
   print('done')
 
 
