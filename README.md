@@ -136,8 +136,8 @@ Since Tensorflow-GPU results are not easily reproducible, we train and test each
 | --------------  | -------------------- |
 | RGB                   | 74.38 |
 | intact                | 42.24 |
-| arc-length symmetric  | 17.54 |
-| arc-length asymmetric |  5.38 |
+| a.l. symmetric 50%    | 17.54 |
+| a.l. asymmetric 50%   |  5.38 |
 | intact + a.l. + d.a.l | 45.59 |
 
 
