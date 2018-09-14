@@ -31,7 +31,6 @@ def train_and_test(datasets):
   # load data for training the model
   # use imagenet rescaling
   X,Y = train_dataset.get_data(IMG_SIZE, COLOR_MODE, 1. / 255)
-  import pdb; pdb.set_trace()
 
   # init 5-fold cross validation
   kfold = StratifiedKFold(n_splits=5, shuffle=True)
@@ -68,9 +67,6 @@ def train_and_test(datasets):
 
     # append accuracy score only
     scores.append(score[1])
-
-    # try visualization here
-    import pdb; pdb.set_trace()
 
     # clear tensorflow memory
     K.clear_session()
