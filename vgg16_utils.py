@@ -42,6 +42,36 @@ def vgg16_sequential(nb_classes):
 
   return model
 
+# loads vgg16 as sequential model, with pooling layers
+# replaced by larger stride on all conv layers
+def vgg16_sequential_stride(nb_classes):
+  model = Sequential([
+    Conv2D(64, (3, 3), input_shape=(224,224,3), padding='same', activation='relu'),
+    Conv2D(64, (3, 3), strides=2, activation='relu', padding='same'),
+
+    Conv2D(128, (3, 3), activation='relu', padding='same'),
+    Conv2D(128, (3, 3), strides=2, activation='relu', padding='same',),
+
+    Conv2D(256, (3, 3), activation='relu', padding='same',),
+    Conv2D(256, (3, 3), activation='relu', padding='same',),
+    Conv2D(256, (3, 3), strides=2, activation='relu', padding='same',),
+
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    Conv2D(512, (3, 3), strides=2, activation='relu', padding='same',),
+
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    Conv2D(512, (3, 3), strides=2, activation='relu', padding='same',),
+    
+    Flatten(),
+    Dense(4096, activation='relu'),
+    Dense(4096, activation='relu'),
+    # For Places 205 categories
+    Dense(nb_classes, activation='softmax')
+  ])
+
+  return model
 
 # loads vgg16 pre-trained on Places365 AND ImageNet
 # removes specified number of layers from the top 
@@ -55,6 +85,15 @@ def vgg16_hybrid_1365(nb_layers_removable=0):
   # remove specified number of layers
   for _ in range(nb_layers_removable): model.pop()
 
+  return model
+
+# loads vgg16_hybrid_1365 with pooling layers replaced
+# by larger stride on all conv layers
+def vgg16_hybrid_1365_stride(nb_layers_removable=0):
+  hybrid = VGG16_Hybrid_1365()
+  model = vgg16_sequential_stride(1365)
+  model.set_weights(hybrid.get_weights())
+  for _ in range(nb_layers_removable): model.pop()
   return model
 
 # vgg16 pre-trained on only Places365
