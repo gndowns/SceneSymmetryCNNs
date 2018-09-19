@@ -140,6 +140,17 @@ Since Tensorflow-GPU results are not easily reproducible, we train and test each
 | a.l. asymmetric 50%   |  5.38 |
 | intact + a.l. + d.a.l | 45.59 |
 
+### Replacing Max Pooling With Larger Stride
+It was suggested that Max Pooling layers may emphasize parallel structures. In this experiment the Max Pooling layers of VGG16 are removed,and the stride is set to 2 on each convolution layer previously preceding a pooling layer.
+The dimensions of each layer are the same, but pixels are randomly subsampled (1 in 4) instead of being sub-sampled by max response to convolutional filters. 
+On RGB images this does not make much of a difference since adjacent pixels are often similar, but it may have a big impact in line drawings where we only have thin black pixels, directly neighbouring the background. If a background pixel is sampled instead of a contour pixel, we lose all information from that contour fragment.
+
+| Dataset         | Mean Accuracy |
+| --------------  | -------------------- |
+| RGB                     | 70.13 |
+| intact                  | 43.39 |
+| ribbon symmetric 50%    | 21.22 |
+| ribbon asymmetric 50%   |  8.02 |
 
 ### Fine Tuning New Dense Layers
 We fine tuned VGG16 for the MIT67 smoothed computer generated line drawings (`mit67_smooth` in the code) by first individually training the top dense layers on the bottleneck features output by the vgg convolutional base; then re-training the entire network, including all vgg convolutional layers and our top model together.
