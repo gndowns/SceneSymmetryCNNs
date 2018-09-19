@@ -1,5 +1,6 @@
 # Remove VGG16 Pooling layers and measure the 
-# impact on performance on Toronto475 RGB
+# impact on performance
+# tests once on pool (original), and again on stride
 
 from mit67_dataset import MIT67Dataset
 from vgg16_utils import vgg16_hybrid_1365, vgg16_hybrid_1365_stride
