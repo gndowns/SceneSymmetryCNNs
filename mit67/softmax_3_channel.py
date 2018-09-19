@@ -1,13 +1,13 @@
 # Combine softmax & 3 channel encoding setups
 
 from mit67_dataset import MIT67Dataset
-from vgg16_utils import vgg16_hybrid_1365
+from vgg16_utils import vgg16_hybrid_1365, vgg16_hybrid_1365_stride
 from keras.layers import Dense
 from keras.optimizers import SGD
 from keras import backend as K
 import numpy as np
 
-def train_and_test(datasets):
+def train_and_test(datasets, model_str):
   train_dataset = datasets[0]
 
 
@@ -41,7 +41,14 @@ def train_and_test(datasets):
   for i in range(5):
     print('trial ' + str(i+1) + ' of 5')
 
-    model = vgg16_hybrid_1365(1)
+    # load proper model
+    if model_str == 'vgg16_hybrid_1365':
+      model = vgg16_hybrid_1365(1)
+    elif model_str == 'vgg16_hybrid_1365_stride':
+      model = vgg16_hybrid_1365_stride(1)
+    else:
+      print 'ERROR: model not implemented'
+      return
 
     # append new softmax layer
     model.add(Dense(train_dataset.nb_classes, activation='softmax'))
@@ -76,6 +83,10 @@ def main():
 
   datasets = [MIT67Dataset(s) for s in dataset_strs]
 
-  train_and_test(datasets)
+  # choose which vgg16 model to use
+  #  model_str = 'vgg16_hybrid_1365'
+  model_str = 'vgg16_hybrid_1365_stride'
+
+  train_and_test(datasets, model_str)
 
 main()

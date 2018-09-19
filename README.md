@@ -151,6 +151,8 @@ On RGB images this does not make much of a difference since adjacent pixels are 
 | intact                  | 43.39 |
 | ribbon symmetric 50%    | 21.22 |
 | ribbon asymmetric 50%   |  8.02 |
+| intact + ribbon + taper | 42.81 |
+
 
 ### Fine Tuning New Dense Layers
 We fine tuned VGG16 for the MIT67 smoothed computer generated line drawings (`mit67_smooth` in the code) by first individually training the top dense layers on the bottleneck features output by the vgg convolutional base; then re-training the entire network, including all vgg convolutional layers and our top model together.
