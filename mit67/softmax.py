@@ -1,33 +1,11 @@
 # Replace softmax and retrain whole network
 
-'''
-still doesn't work with TF GPU
-# reproducibility, taken from:
+# NOTE: I attempted the 'steps for reproducibility' mentioned here:
 # https://keras.io/getting-started/faq/#how-can-i-obtain-reproducible-results-using-keras-during-development
-
-# must all be set before any imports 
-import numpy as np
-import tensorflow as tf
-import random as rn
-
-np.random.seed(2018)
-
-# something to do with python random numbers
-rn.seed(2019)
-
-# force Tensorflow to use single thread for reproducibility
-session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
-
-from keras import backend as K
-# Tensorflow has its own random number generator independ of numpy,
-# which must also be seeded
-tf.set_random_seed(2020)
-
-# Tensorflow initial state
-sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
-K.set_session(sess)
-'''
-
+# however it seems there is still some non-determinism in 
+# Keras / TF / GPU operations
+# these results are NOT reproducible
+# we instead run everything 5 times and take the mean
 
 from mit67_dataset import MIT67Dataset
 from vgg16_utils import vgg16_hybrid_1365, vgg16_hybrid_1365_stride
@@ -35,6 +13,7 @@ from keras.layers import Dense
 from keras.optimizers import SGD
 from keras import backend as K
 import numpy as np
+import sys
 
 def train_and_test(datasets, model_str):
   train_dataset = datasets[0]
@@ -42,73 +21,72 @@ def train_and_test(datasets, model_str):
   img_size = (224,224)
   color_mode = 'rgb'
 
-  x_train, y_train = train_dataset.train_data(img_size,color_mode,1)
-  x_test, y_test = train_dataset.test_data(img_size,color_mode,1)
-  
-  # load testing datasets
-  nb_test_sets = len(datasets[1:])
-  xs_test, ys_test = [None]*nb_test_sets, [None]*nb_test_sets
-  for j,d in enumerate(datasets[1:]):
-    xs_test[j],ys_test[j] = d.test_data(img_size,color_mode,1)
+  nb_datasets = len(datasets)
 
+  # only load training data for first dataset
+  x_train, y_train = train_dataset.train_data(img_size,color_mode,1)
+
+  # load testing data for all datasets
+  x_test, y_test = [None]*nb_datasets, [None]*nb_datasets
+
+  for j,d in enumerate(datasets):
+    x_test[j], y_test[j] = d.test_data(img_size, color_mode, 1)
+  
   # repeat 5 times and take the mean
   # since results are not perfectly reproducible
-  train_scores = [None] * 5
-  test_scores = [[None]*5 for _ in range(nb_test_sets)]
+  scores = [ [None]*5 for _ in range(nb_datasets) ]
   for i in range(5):
     print('trial ' + str(i+1) + ' of 5')
-    # load proper model 
-    if model_str == 'vgg16_hybrid_1365':
-      model = vgg16_hybrid_1365(1)
-    elif model_str == 'vgg16_hybrid_1365_stride':
-      model = vgg16_hybrid_1365_stride(1)
-    else:
-      print 'ERROR: model not implemented'
-      return
 
-    # append new softmax layer
-    model.add(Dense(train_dataset.nb_classes, 
-      # for reproducibility
-      #  kernel_initializer=glorot_uniform(seed=2018),
-      activation='softmax'))
-
-    # fine tuning stats
-    model.compile(
-      optimizer=SGD(lr=1e-3,decay=1e-6,momentum=0.9,nesterov=True),
-      loss='categorical_crossentropy',
-      metrics=['accuracy']
-    )
-
-    model.fit(x_train, y_train,
-      batch_size = 32,
-      # converges very quickly, but need more (10) for mit67
-      #  epochs = 5,
-      epochs = 10,
-      validation_data = (x_test, y_test)
-    )
-
-    # take accuracy score
-    train_scores[i] = model.evaluate(x_test,y_test)[1]
-
-    print('testing on other datasets...')
-    for j,d in enumerate(datasets[1:]):
-      print(d.str)
-      test_scores[j][i] = model.evaluate(xs_test[j],ys_test[j])[1]
+    trial(x_train, y_train, x_test, y_test, scores, model_str, i)
 
     # clear memory
     K.clear_session()
 
-  # mean results
-  print(train_dataset.str)
-  print(train_scores)
-  print(np.mean(train_scores))
-  for j,d in enumerate(datasets[1:]):
+  # print mean results
+  for j,d in enumerate(datasets):
     print(d.str)
-    print(test_scores[j])
-    print(np.mean(test_scores[j]))
+    print(scores[j])
+    print(np.mean(scores[j]))
 
   print('done')
 
+
+# Runs a single train and test trial
+def trial(x_train, y_train, x_test, y_test, scores, model_str, i):
+  # load proper model 
+  if model_str == 'vgg16_hybrid_1365':
+    model = vgg16_hybrid_1365(1)
+  elif model_str == 'vgg16_hybrid_1365_stride':
+    model = vgg16_hybrid_1365_stride(1)
+  else:
+    print 'ERROR: model not implemented'
+    sys.exit()
+
+  # append new softmax layer
+  model.add(Dense(y_test[0].shape[1], activation='softmax'))
+
+  # fine tuning stats
+  model.compile(
+    optimizer=SGD(lr=1e-3,decay=1e-6,momentum=0.9,nesterov=True),
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+  )
+
+  model.fit(x_train, y_train,
+    batch_size = 32,
+    # converges very quickly, but need more (10) for mit67
+    #  epochs = 5,
+    epochs = 10,
+    validation_data = (x_test[0], y_test[0])
+  )
+
+  # take accuracy score for each dataset
+  print('evaluating on all datasets...')
+  for j in range(len(x_test)):
+    scores[j][i] = model.evaluate(x_test[j], y_test[j])[1]
+
+  return
 
 
 def main():
