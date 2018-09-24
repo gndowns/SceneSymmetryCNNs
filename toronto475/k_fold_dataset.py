@@ -31,7 +31,10 @@ class KFoldDataset:
       'dR_symmetric': 'data/toronto/dR_symmetric',
       'dR_asymmetric': 'data/toronto/dR_asymmetric',
       'dR_weighted': 'data/toronto/dR_weighted',
-      'd2R_weighted': 'data/toronto/d2R_weighted'
+      'd2R_weighted': 'data/toronto/d2R_weighted',
+      'max_R': 'data/toronto/max_R',
+      'min_R': 'data/toronto/min_R',
+      'dollar_weighted': 'data/toronto/dollar_weighted'
     }
     self.dir = directories[dataset_str]
     self.str = dataset_str

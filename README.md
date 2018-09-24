@@ -59,6 +59,20 @@ There is some difference in performance, but only by 1-2%. arc-length + intact +
 
 <br>
 
+### Control Experiments
+We repeat the above experiments with contours weighted by a few different measures, to compare the effect of each on performance. This provides a baseline to compare against the behaviour of symmetry.
+All use the 3-channel setup described above, with the weighted channels using the measure specified.
+All follow RGB = intact + weighted + weighted
+
+| Input Features         | Linear SVC % Accuracy (mean over 5 folds) |
+| --------------  | ----------------------------------------- |
+| arc-length symmetry         | 94.53 |
+| max R                       | 90.94 |
+| min R                       | 93.47 | 
+| intact + min R + max R      | 95.59 |
+| (Dollar) weighted edges     | 92.83 |
+
+
 ### Fine Tuning Softmax of VGG16_Hybrid_1365
 In this experiment we replace only the softmax layer of vgg16_hybrid_1365, then train all layers together.
 In all cases the optimizer is `SGD(lr=1e-3, decay=1e-6, momentum=0.9, nesterov=True)`.
