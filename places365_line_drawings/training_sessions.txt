@@ -1,0 +1,43 @@
+ID: 1
+LR: Init 0.01, deacy .1 every 10 epochs
+Data Aug: Taken from cats/dogs blog post
+Batch Size: 128 
+Total Epochs Trained: 9
+
+Learning Rate: 0.01
+2018-10-21 13:31:21.745082: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2018-10-21 13:31:22.142631: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties:
+name: TITAN Xp major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:17:00.0
+totalMemory: 11.90GiB freeMemory: 11.73GiB
+2018-10-21 13:31:22.142668: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -> (device: 0, name: TITAN Xp, pci bus id: 0000:17:00.0, compute capability: 6.1)
+Epoch 1/75
+14089/14089 [==============================] - 19527s - loss: 5.0802 - acc: 0.0475 - top_5: 0.1461 - val_loss: 4.1588 - val_acc: 0.1286 - val_top_5: 0.3366
+Learning Rate: 0.01
+Epoch 2/75
+14089/14089 [==============================] - 7620s - loss: 4.0754 - acc: 0.1398 - top_5: 0.3517 - val_loss: 3.7355 - val_acc: 0.1858 - val_top_5: 0.4308
+Learning Rate: 0.01
+Epoch 3/75
+14089/14089 [==============================] - 7597s - loss: 3.7674 - acc: 0.1810 - top_5: 0.4202 - val_loss: 3.5152 - val_acc: 0.2200 - val_top_5: 0.4786
+Learning Rate: 0.01
+Epoch 4/75
+14089/14089 [==============================] - 7587s - loss: 3.5990 - acc: 0.2049 - top_5: 0.4572 - val_loss: 3.3700 - val_acc: 0.2428 - val_top_5: 0.5114
+Learning Rate: 0.01
+Epoch 5/75
+14089/14089 [==============================] - 7583s - loss: 3.4850 - acc: 0.2216 - top_5: 0.4823 - val_loss: 3.2754 - val_acc: 0.2586 - val_top_5: 0.5301
+Learning Rate: 0.01
+Epoch 6/75
+14089/14089 [==============================] - 7578s - loss: 3.3992 - acc: 0.2344 - top_5: 0.5004 - val_loss: 3.2417 - val_acc: 0.2637 - val_top_5: 0.5362
+Learning Rate: 0.01
+Epoch 7/75
+14089/14089 [==============================] - 7575s - loss: 3.3308 - acc: 0.2453 - top_5: 0.5151 - val_loss: 3.1827 - val_acc: 0.2739 - val_top_5: 0.5466
+Learning Rate: 0.01
+Epoch 8/75
+14089/14089 [==============================] - 7577s - loss: 3.2735 - acc: 0.2540 - top_5: 0.5271 - val_loss: 3.1551 - val_acc: 0.2789 - val_top_5: 0.5535
+Learning Rate: 0.01
+Epoch 9/75
+14089/14089 [==============================] - 7596s - loss: 3.2243 - acc: 0.2615 - top_5: 0.5376 - val_loss: 3.1005 - val_acc: 0.2897 - val_top_5: 0.5661
+Learning Rate: 0.001
+Epoch 10/75
+   84/14089 [..............................] - ETA: 7306s - loss: 3.1792 - acc: 0.2693 - top_5: 0.5482^CTraceback (most recent call last):
+

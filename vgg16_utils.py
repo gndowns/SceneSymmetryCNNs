@@ -12,10 +12,42 @@ from vgg16_hybrid_places_1365 import VGG16_Hybrid_1365
 from vgg16_places_365 import VGG16_Places365
 
 
-# returns VGG16 architecture as sequential model, w/ specified number of classes in the last layer
-def vgg16_sequential(nb_classes):
+# 11-layer model A
+def vgg11(nb_classes, nb_channels):
   model = Sequential([
-    Conv2D(64, (3, 3), input_shape=(224,224,3), padding='same', activation='relu'),
+    Conv2D(64, (3, 3), input_shape=(224,224,nb_channels), padding='same', activation='relu'),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Conv2D(128, (3, 3), activation='relu', padding='same',),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Conv2D(256, (3, 3), activation='relu', padding='same',),
+    Conv2D(256, (3, 3), activation='relu', padding='same',),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Flatten(),
+    Dense(4096, activation='relu'),
+    Dropout(0.5),
+    Dense(4096, activation='relu'),
+    Dropout(0.5),
+    # For Places 205 categories
+    Dense(nb_classes, activation='softmax')
+  ])
+
+  return model
+
+# returns VGG16 architecture as sequential model, w/ specified number of classes in the last layer
+def vgg16_sequential(nb_classes, nb_channels):
+  model = Sequential([
+    Conv2D(64, (3, 3), input_shape=(224,224,nb_channels), padding='same', activation='relu'),
     Conv2D(64, (3, 3), activation='relu', padding='same'),
     MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
     Conv2D(128, (3, 3), activation='relu', padding='same'),
@@ -79,7 +111,7 @@ def vgg16_hybrid_1365(nb_layers_removable=0):
   # load pre-trained model
   hybrid = VGG16_Hybrid_1365()
   # load VGG16 as Sequential model
-  model = vgg16_sequential(1365)
+  model = vgg16_sequential(1365, 3)
   # copy hybrid weights to sequential model
   model.set_weights(hybrid.get_weights())
   # remove specified number of layers
