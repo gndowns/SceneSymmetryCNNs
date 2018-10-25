@@ -3,7 +3,7 @@ from __future__ import print_function
 from vgg16_utils import vgg11
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import SGD
-from keras.callbacks import ModelCheckpoint, LearningRateScheduler, LambdaCallback
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler, LambdaCallback, EarlyStopping
 from keras.metrics import top_k_categorical_accuracy
 from keras.backend import eval
 import math
@@ -18,6 +18,7 @@ def step_decay(epoch):
   # plateaus after 10 epochs with this. By the time lr drops, it's already flattened out
   epochs_drop = 10.0
   #  epochs_drop = 5.0
+  #  epochs_drop = 100.0
   lrate = init_lrate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
   print('Learning Rate: ' + str(lrate))
   return lrate
@@ -57,8 +58,8 @@ def train_and_test(weights_file, initial_epoch):
   color_mode = 'grayscale'
   # causes oom
   #  batch_size = 256
-  batch_size = 128
-  #  batch_size = 64
+  #  batch_size = 128
+  batch_size = 64
 
   # use flow from directory since there's so much data 
   # absolute path
@@ -102,7 +103,7 @@ def train_and_test(weights_file, initial_epoch):
   weights_file = 'models/places365_vgg11_weights.h5'
   checkpoint = ModelCheckpoint(weights_file,
     monitor='val_loss', 
-    verbose=0, 
+    verbose=1, 
     save_best_only=True, 
     # save if loss < min(loss) so far
     mode='min'
@@ -116,6 +117,16 @@ def train_and_test(weights_file, initial_epoch):
     lambda epochs,logs : print('Learning Rate: ' + str(eval(model.optimizer.lr)))
   )
 
+  # stop when loss stops improving
+  early_stopping = EarlyStopping(
+    monitor='val_loss',
+    min_delta=0,
+    # somewhat arbitrarily picked after reading
+    # some cowboy ml blog posts
+    patience=2,
+    mode='min'
+  )
+
 
   model.fit_generator(
     train_gen,
@@ -123,8 +134,9 @@ def train_and_test(weights_file, initial_epoch):
     epochs = epochs,
     validation_data = test_gen,
     validation_steps = nb_test_samples // batch_size,
-    callbacks = [checkpoint, lr_scheduler],
+    #  callbacks = [checkpoint, lr_scheduler],
     #  callbacks = [checkpoint, lr_tracker],
+    callbacks = [checkpoint, lr_scheduler, early_stopping],
     # pickup at last epoch
     initial_epoch = initial_epoch
   )
@@ -134,12 +146,12 @@ def train_and_test(weights_file, initial_epoch):
 def main():
 
   # set to None to initialize weights from scratch
-  #  weights_file = 'models/places365_vgg11_6_epochs_decay_weights.h5'
-  #  initial_epoch = 7
+  weights_file = 'models/places365_vgg11_id_0_weights.h5'
+  initial_epoch = 9 
   
   # train from scratch
-  weights_file = None
-  initial_epoch = 0
+  #  weights_file = None
+  #  initial_epoch = 0
 
   train_and_test(weights_file, initial_epoch)
 
