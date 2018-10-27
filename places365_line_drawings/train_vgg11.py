@@ -12,13 +12,15 @@ import math
 # learning rate schedule
 # https://machinelearningmastery.com/using-learning-rate-schedules-deep-learning-models-python-keras/
 def step_decay(epoch):
-  init_lrate = 0.01
+  #  init_lrate = 0.01
+  # starting at epoch 10
+  init_lrate = 0.001
   # decay by 1/10th every 10 epochs
   drop = 0.1
   # plateaus after 10 epochs with this. By the time lr drops, it's already flattened out
-  epochs_drop = 10.0
+  #  epochs_drop = 10.0
   #  epochs_drop = 5.0
-  #  epochs_drop = 100.0
+  epochs_drop = 100.0
   lrate = init_lrate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
   print('Learning Rate: ' + str(lrate))
   return lrate
@@ -153,6 +155,9 @@ def main():
   #  weights_file = None
   #  initial_epoch = 0
 
+  print('using weights file ' + weights_file + 
+    ' at initial epoch ' + str(initial_epoch)
+  )
   train_and_test(weights_file, initial_epoch)
 
 main()
