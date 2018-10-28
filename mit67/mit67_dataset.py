@@ -19,13 +19,14 @@ class MIT67Dataset:
     # select directory from specified sub-dataset
     # each directory should contain a test/ and train/
     # with 67 category sub directories
+    root_dir = '/usr/local/data/gabriel'
     directories = {
-      'rgb': 'data/mit67/rgb',
-      'smooth': 'data/mit67/smooth',
-      'smooth_dR_symmetric': 'data/mit67/smooth_dR_symmetric',
-      'smooth_dR_asymmetric': 'data/mit67/smooth_dR_asymmetric',
-      'dR_weighted': 'data/mit67/dR_weighted',
-      'd2R_weighted': 'data/mit67/d2R_weighted'
+      #  'rgb': 'data/mit67/rgb',
+      'smooth': root_dir + '/mit67/smooth',
+      #  'smooth_dR_symmetric': 'data/mit67/smooth_dR_symmetric',
+      #  'smooth_dR_asymmetric': 'data/mit67/smooth_dR_asymmetric',
+      #  'dR_weighted': 'data/mit67/dR_weighted',
+      #  'd2R_weighted': 'data/mit67/d2R_weighted'
     }
 
     self.dir = directories[dataset_str]
