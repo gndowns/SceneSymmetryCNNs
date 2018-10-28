@@ -97,3 +97,53 @@ Epoch 16/75
 
 Accuracy drops below the initial 30, doesn't seem to improve at all. super curious, not sure why it shoots down like that
 Try going back to lower learning rate at 10 i guess...
+
+
+(there was another one, it reached somewhere around epoch 24. it was around 30% top-1 and 58% top-5 last I checked.
+It early stopped and the computer was rebooted, so I lost the screen session. The weights are saved in '_runaway_weights.h5'
+)
+
+
+ID: 3
+all params same as 0, but with no manual stopping
+(early stopping with patience 2)
+batch size: 64, with data augmentation
+starting epoch: 0
+(in progress)
+Learning Rate: 0.01
+2018-10-27 15:07:08.358375: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2018-10-27 15:07:08.631800: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties:
+name: TITAN Xp major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:17:00.0
+totalMemory: 11.91GiB freeMemory: 11.75GiB
+2018-10-27 15:07:08.631838: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -> (device: 0, name: TITAN Xp, pci bus id: 0000:17:00.0, compute capability: 6.1)
+Epoch 1/75
+28179/28179 [==============================] - 23395s - loss: 5.8079 - acc: 0.0056 - top_5: 0.0246 - val_loss: 4.9462 - val_acc: 0.0482 - val_top_5: 0.1590
+Learning Rate: 0.01
+Epoch 2/75
+28179/28179 [==============================] - 8021s - loss: 4.3362 - acc: 0.1095 - top_5: 0.2930 - val_loss: 3.8137 - val_acc: 0.1771 - val_top_5: 0.4138
+Learning Rate: 0.01
+Epoch 3/75
+28179/28179 [==============================] - 8001s - loss: 3.8400 - acc: 0.1704 - top_5: 0.4040 - val_loss: 3.5664 - val_acc: 0.2134 - val_top_5: 0.4698
+Learning Rate: 0.01
+Epoch 4/75
+28179/28179 [==============================] - 7990s - loss: 3.6544 - acc: 0.1968 - top_5: 0.4449 - val_loss: 3.4422 - val_acc: 0.2333 - val_top_5: 0.4951
+Learning Rate: 0.01
+Epoch 5/75
+28179/28179 [==============================] - 7981s - loss: 3.5476 - acc: 0.2124 - top_5: 0.4684 - val_loss: 3.3615 - val_acc: 0.2464 - val_top_5: 0.5134
+Learning Rate: 0.01
+Epoch 6/75
+28179/28179 [==============================] - 7962s - loss: 3.4768 - acc: 0.2229 - top_5: 0.4837 - val_loss: 3.3059 - val_acc: 0.2594 - val_top_5: 0.5238
+Learning Rate: 0.01
+Epoch 7/75
+28179/28179 [==============================] - 7957s - loss: 3.4285 - acc: 0.2305 - top_5: 0.4943 - val_loss: 3.2898 - val_acc: 0.2596 - val_top_5: 0.5321
+Learning Rate: 0.01
+Epoch 8/75
+28179/28179 [==============================] - 8292s - loss: 3.3934 - acc: 0.2357 - top_5: 0.5016 - val_loss: 3.2792 - val_acc: 0.2627 - val_top_5: 0.5312
+Learning Rate: 0.01
+Epoch 9/75
+28179/28179 [==============================] - 8258s - loss: 3.3693 - acc: 0.2401 - top_5: 0.5070 - val_loss: 3.2810 - val_acc: 0.2633 - val_top_5: 0.5350
+Learning Rate: 0.01
+Epoch 10/75
+28179/28179 [==============================] - 7943s - loss: 3.3524 - acc: 0.2429 - top_5: 0.5110 - val_loss: 3.2467 - val_acc: 0.2673 - val_top_5: 0.5380
+
