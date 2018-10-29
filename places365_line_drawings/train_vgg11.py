@@ -12,9 +12,9 @@ import math
 # learning rate schedule
 # https://machinelearningmastery.com/using-learning-rate-schedules-deep-learning-models-python-keras/
 def step_decay(epoch):
-  #  init_lrate = 0.01
+  init_lrate = 0.01
   # starting at epoch 10
-  init_lrate = 0.001
+  #  init_lrate = 0.001
   # decay by 1/10th every 10 epochs
   drop = 0.1
   # plateaus after 10 epochs with this. By the time lr drops, it's already flattened out
@@ -105,7 +105,7 @@ def train_and_test(weights_file, initial_epoch):
   weights_file = 'models/places365_vgg11_weights.h5'
   checkpoint = ModelCheckpoint(weights_file,
     monitor='val_loss', 
-    verbose=1, 
+    verbose=0, 
     save_best_only=True, 
     # save if loss < min(loss) so far
     mode='min'
@@ -113,11 +113,6 @@ def train_and_test(weights_file, initial_epoch):
 
   # for step decay
   lr_scheduler = LearningRateScheduler(step_decay)
-
-  # for time decay
-  lr_tracker = LambdaCallback(on_epoch_begin=
-    lambda epochs,logs : print('Learning Rate: ' + str(eval(model.optimizer.lr)))
-  )
 
   # stop when loss stops improving
   early_stopping = EarlyStopping(
@@ -137,7 +132,6 @@ def train_and_test(weights_file, initial_epoch):
     validation_data = test_gen,
     validation_steps = nb_test_samples // batch_size,
     #  callbacks = [checkpoint, lr_scheduler],
-    #  callbacks = [checkpoint, lr_tracker],
     callbacks = [checkpoint, lr_scheduler, early_stopping],
     # pickup at last epoch
     initial_epoch = initial_epoch
@@ -148,14 +142,14 @@ def train_and_test(weights_file, initial_epoch):
 def main():
 
   # set to None to initialize weights from scratch
-  weights_file = 'models/places365_vgg11_id_0_weights.h5'
-  initial_epoch = 9 
+  #  weights_file = 'models/places365_vgg11_id_0_weights.h5'
+  #  initial_epoch = 9 
   
   # train from scratch
-  #  weights_file = None
-  #  initial_epoch = 0
+  weights_file = None
+  initial_epoch = 0
 
-  print('using weights file ' + weights_file + 
+  print('using weights file ' + str(weights_file) + 
     ' at initial epoch ' + str(initial_epoch)
   )
   train_and_test(weights_file, initial_epoch)
