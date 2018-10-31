@@ -35,6 +35,8 @@ class KFoldDataset:
       #  'max_R': '/usr/local/data/gabriel/toronto/max_R',
       'min_R_1': '/usr/local/data/gabriel/toronto/min_R_1',
       'min_R_2': '/usr/local/data/gabriel/toronto/min_R_2',
+      'max_R_1': '/usr/local/data/gabriel/toronto/max_R_1',
+      'max_R_2': '/usr/local/data/gabriel/toronto/max_R_2',
       #  'dollar_weighted': 'data/toronto/dollar_weighted',
       #  'dollar_weighted_2': 'data/toronto/dollar_weighted_2',
       #  'skeletons': '/usr/local/data/gabriel/toronto/skeletons'
