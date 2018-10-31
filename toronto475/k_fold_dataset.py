@@ -26,15 +26,18 @@ class KFoldDataset:
     # use dictionary to log accepted datasets
     # dataset: relative/path/to/images/from/root
     directories = {
-      'rgb': 'data/toronto/rgb',
-      'line_drawings': 'data/toronto/line_drawings',
-      'dR_symmetric': 'data/toronto/dR_symmetric',
-      'dR_asymmetric': 'data/toronto/dR_asymmetric',
-      'dR_weighted': 'data/toronto/dR_weighted',
-      'd2R_weighted': 'data/toronto/d2R_weighted',
-      'max_R': 'data/toronto/max_R',
-      'min_R': 'data/toronto/min_R',
-      'dollar_weighted': 'data/toronto/dollar_weighted'
+      #  'rgb': 'data/toronto/rgb',
+      'line_drawings': '/usr/local/data/gabriel/toronto/line_drawings',
+      #  'dR_symmetric': 'data/toronto/dR_symmetric',
+      #  'dR_asymmetric': 'data/toronto/dR_asymmetric',
+      #  'dR_weighted': 'data/toronto/dR_weighted',
+      #  'd2R_weighted': 'data/toronto/d2R_weighted',
+      #  'max_R': '/usr/local/data/gabriel/toronto/max_R',
+      'min_R_1': '/usr/local/data/gabriel/toronto/min_R_1',
+      'min_R_2': '/usr/local/data/gabriel/toronto/min_R_2',
+      #  'dollar_weighted': 'data/toronto/dollar_weighted',
+      #  'dollar_weighted_2': 'data/toronto/dollar_weighted_2',
+      #  'skeletons': '/usr/local/data/gabriel/toronto/skeletons'
     }
     self.dir = directories[dataset_str]
     self.str = dataset_str
