@@ -87,7 +87,8 @@ def main():
   # all others will be tested on
   #  dataset_strs = ['rgb']
   #  dataset_strs = ['line_drawings','dR_symmetric', 'dR_asymmetric']
-  dataset_strs = ['line_drawings', 'dR_weighted']
+  #  dataset_strs = ['line_drawings', 'dR_weighted']
+  dataset_strs = ['skeletons']
 
   datasets = [KFoldDataset(s) for s in dataset_strs]
 
