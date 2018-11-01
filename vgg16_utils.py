@@ -8,6 +8,7 @@
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Flatten
 from keras.optimizers import RMSprop, SGD
+from keras.regularizers import l2
 from vgg16_hybrid_places_1365 import VGG16_Hybrid_1365
 from vgg16_places_365 import VGG16_Places365
 
@@ -34,6 +35,41 @@ def vgg11(nb_classes, nb_channels):
     MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
 
     Flatten(),
+    # taken from vgg16 paper
+    Dense(4096, activation='relu', kernel_regularizer=l2(1e-7)),
+    Dropout(0.5),
+    Dense(4096, activation='relu', kernel_regularizer=l2(1e-7)),
+    Dropout(0.5),
+    # For Places 205 categories
+    Dense(nb_classes, activation='softmax')
+  ])
+
+  return model
+
+# 13-layer, model B
+def vgg13(nb_classes, nb_channels):
+  model = Sequential([
+    Conv2D(64, (3, 3), input_shape=(224,224,nb_channels), padding='same', activation='relu'),
+    Conv2D(64, (3, 3), activation='relu', padding='same',),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Conv2D(128, (3, 3), activation='relu', padding='same',),
+    Conv2D(128, (3, 3), activation='relu', padding='same',),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Conv2D(256, (3, 3), activation='relu', padding='same',),
+    Conv2D(256, (3, 3), activation='relu', padding='same',),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    Conv2D(512, (3, 3), activation='relu', padding='same',),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+
+    Flatten(),
     Dense(4096, activation='relu'),
     Dropout(0.5),
     Dense(4096, activation='relu'),
@@ -43,6 +79,7 @@ def vgg11(nb_classes, nb_channels):
   ])
 
   return model
+
 
 # returns VGG16 architecture as sequential model, w/ specified number of classes in the last layer
 def vgg16_sequential(nb_classes, nb_channels):
@@ -67,7 +104,9 @@ def vgg16_sequential(nb_classes, nb_channels):
     MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
     Flatten(),
     Dense(4096, activation='relu'),
+    Dropout(0.5),
     Dense(4096, activation='relu'),
+    Dropout(0.5),
     # For Places 205 categories
     Dense(nb_classes, activation='softmax')
   ])
