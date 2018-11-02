@@ -109,7 +109,6 @@ all params same as 0, but with no manual stopping
 (early stopping with patience 2)
 batch size: 64, with data augmentation
 starting epoch: 0
-(in progress)
 Learning Rate: 0.01
 2018-10-27 15:07:08.358375: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
 2018-10-27 15:07:08.631800: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties:
@@ -152,4 +151,153 @@ Epoch 11/75
 Learning Rate: 0.01
 Epoch 12/75
 28179/28179 [==============================] - 7840s - loss: 3.3373 - acc: 0.2455 - top_5: 0.5141 - val_loss: 3.2613 - val_acc: 0.2670 - val_top_5: 0.5381
+Learning Rate: 0.01
+Epoch 13/75
+28179/28179 [==============================] - 7840s - loss: 3.3409 - acc: 0.2452 - top_5: 0.5131 - val_loss: 3.2941 - val_acc: 0.2658 - val_top_5: 0.5385
+
+stopped after last 3 epochs showed no improvement.
+Last epoch saved after: 10 (lol, that worked out nicely)
+
+ID: 4
+(continuation of 3)
+Learning Rate: 0.001
+Epoch 11/75
+28179/28179 [==============================] - 7954s - loss: 3.1700 - acc: 0.2709 - top_5: 0.5488 - val_loss: 3.1167 - val_acc: 0.2863 - val_top_5: 0.5642
+Learning Rate: 0.001
+Epoch 12/75
+28179/28179 [==============================] - 7954s - loss: 3.1164 - acc: 0.2800 - top_5: 0.5594 - val_loss: 3.0969 - val_acc: 0.2911 - val_top_5: 0.5704
+Learning Rate: 0.001
+Epoch 13/75
+28179/28179 [==============================] - 7952s - loss: 3.0875 - acc: 0.2845 - top_5: 0.5659 - val_loss: 3.0747 - val_acc: 0.2920 - val_top_5: 0.5740
+Learning Rate: 0.001
+Epoch 14/75
+28179/28179 [==============================] - 7947s - loss: 3.0642 - acc: 0.2881 - top_5: 0.5705 - val_loss: 3.0669 - val_acc: 0.2944 - val_top_5: 0.5740
+Learning Rate: 0.001
+Epoch 15/75
+28179/28179 [==============================] - 7956s - loss: 3.0444 - acc: 0.2917 - top_5: 0.5746 - val_loss: 3.0630 - val_acc: 0.2953 - val_top_5: 0.5763
+Learning Rate: 0.001
+Epoch 16/75
+28179/28179 [==============================] - 7947s - loss: 3.0257 - acc: 0.2944 - top_5: 0.5784 - val_loss: 3.0387 - val_acc: 0.2999 - val_top_5: 0.5789
+Learning Rate: 0.001
+Epoch 17/75
+28179/28179 [==============================] - 7952s - loss: 3.0101 - acc: 0.2970 - top_5: 0.5816 - val_loss: 3.0304 - val_acc: 0.2990 - val_top_5: 0.5818
+Learning Rate: 0.001
+Epoch 18/75
+28179/28179 [==============================] - 7953s - loss: 2.9953 - acc: 0.2996 - top_5: 0.5847 - val_loss: 3.0231 - val_acc: 0.3010 - val_top_5: 0.5827
+Learning Rate: 0.001
+Epoch 19/75
+28179/28179 [==============================] - 7860s - loss: 2.9820 - acc: 0.3015 - top_5: 0.5872 - val_loss: 3.0299 - val_acc: 0.2997 - val_top_5: 0.5804
+
+ID: 5
+tried adding l2 regularization to dense layers.
+Did 5e-4 based on VGG16 paper, must've been too much accuracy 
+did not improve at all
+5e-4
+ch 1/75
+28179/28179 [==============================] - 8714s - loss: 6.8847 - acc: 0.0027 - top_5: 0.0136 - val_loss: 5.9216 - val_acc: 0.0027 - val_top_5: 0.0137
+Learning Rate: 0.01
+Epoch 2/75
+28179/28179 [==============================] - 21862s - loss: 5.9023 - acc: 0.0028 - top_5: 0.0136 - val_loss: 5.9021 - val_acc: 0.0028 - val_top_5: 0.0139
+Learning Rate: 0.01
+Epoch 3/75
+28179/28179 [==============================] - 8329s - loss: 5.8989 - acc: 0.0027 - top_5: 0.0138 - val_loss: 5.9017 - val_acc: 0.0027 - val_top_5: 0.0139
+
+ID: 6
+changed l2 parameter to 1e-7
+all else the same
+Epoch 1/75
+28179/28179 [==============================] - 8710s - loss: 5.9003 - acc: 0.0027 - top_5: 0.0137 - val_loss: 5.9030 - val_acc: 0.0027 - val_top_5: 0.0137
+Learning Rate: 0.01
+Epoch 2/75
+28179/28179 [==============================] - 8340s - loss: 5.9000 - acc: 0.0028 - top_5: 0.0137 - val_loss: 5.9031 - val_acc: 0.0027 - val_top_5: 0.0136
+Learning Rate: 0.01
+Epoch 3/75
+28179/28179 [==============================] - 8443s - loss: 5.7979 - acc: 0.0061 - top_5: 0.0263 - val_loss: 4.9522 - val_acc: 0.0461 - val_top_5: 0.1558
+Learning Rate: 0.01
+Epoch 4/75
+28179/28179 [==============================] - 8412s - loss: 4.3396 - acc: 0.1088 - top_5: 0.2930 - val_loss: 3.7933 - val_acc: 0.1813 - val_top_5: 0.4179
+Learning Rate: 0.01
+Epoch 5/75
+28179/28179 [==============================] - 8382s - loss: 3.8437 - acc: 0.1697 - top_5: 0.4035 - val_loss: 3.5794 - val_acc: 0.2143 - val_top_5: 0.4664
+Learning Rate: 0.01
+Epoch 6/75
+28179/28179 [==============================] - 8386s - loss: 3.6575 - acc: 0.1963 - top_5: 0.4446 - val_loss: 3.4121 - val_acc: 0.2392 - val_top_5: 0.5018
+Learning Rate: 0.01
+Epoch 7/75
+28179/28179 [==============================] - 8369s - loss: 3.5514 - acc: 0.2124 - top_5: 0.4678 - val_loss: 3.3683 - val_acc: 0.2436 - val_top_5: 0.5104
+Learning Rate: 0.01
+Epoch 8/75
+28179/28179 [==============================] - 8359s - loss: 3.4817 - acc: 0.2227 - top_5: 0.4835 - val_loss: 3.3252 - val_acc: 0.2525 - val_top_5: 0.5233
+Learning Rate: 0.01
+Epoch 9/75
+28179/28179 [==============================] - 8360s - loss: 3.4337 - acc: 0.2303 - top_5: 0.4944 - val_loss: 3.3045 - val_acc: 0.2600 - val_top_5: 0.5274
+Learning Rate: 0.01
+Epoch 10/75
+28179/28179 [==============================] - 8360s - loss: 3.3999 - acc: 0.2359 - top_5: 0.5015 - val_loss: 3.2883 - val_acc: 0.2616 - val_top_5: 0.5336
+Learning Rate: 0.01
+Epoch 11/75
+28179/28179 [==============================] - 8351s - loss: 3.3747 - acc: 0.2397 - top_5: 0.5062 - val_loss: 3.2593 - val_acc: 0.2695 - val_top_5: 0.5435
+Learning Rate: 0.01
+Epoch 12/75
+28179/28179 [==============================] - 8257s - loss: 3.3590 - acc: 0.2430 - top_5: 0.5102 - val_loss: 3.2932 - val_acc: 0.2617 - val_top_5: 0.5345
+Learning Rate: 0.01
+Epoch 13/75
+28179/28179 [==============================] - 8256s - loss: 3.3505 - acc: 0.2442 - top_5: 0.5121 - val_loss: 3.2852 - val_acc: 0.2672 - val_top_5: 0.5365
+Learning Rate: 0.01
+Epoch 14/75
+28179/28179 [==============================] - 8246s - loss: 3.3488 - acc: 0.2448 - top_5: 0.5127 - val_loss: 3.2807 - val_acc: 0.2644 - val_top_5: 0.5381
+
+It exited from early stopping, but it looks like this was just a temporary dip, 
+It looks like it's still improving, i'm gonna turn off early stopping and let it keep running with same learning rate
+
+ID: 7
+continued 6, but disabled early stopping
+it rapidly diverged
+Learning Rate: 0.01
+Epoch 15/75
+28179/28179 [==============================] - 8378s - loss: 3.3600 - acc: 0.2421 - top_5: 0.5102 - val_loss: 3.2756 - val_acc: 0.2669 - val_top_5: 0.5347
+Learning Rate: 0.01
+Epoch 16/75
+28179/28179 [==============================] - 8340s - loss: 3.3498 - acc: 0.2445 - top_5: 0.5120 - val_loss: 3.2675 - val_acc: 0.2666 - val_top_5: 0.5377
+Learning Rate: 0.01
+Epoch 17/75
+28179/28179 [==============================] - 8347s - loss: 3.3455 - acc: 0.2450 - top_5: 0.5133 - val_loss: 3.2666 - val_acc: 0.2693 - val_top_5: 0.5406
+Learning Rate: 0.01
+Epoch 18/75
+28179/28179 [==============================] - 8248s - loss: 3.3518 - acc: 0.2444 - top_5: 0.5124 - val_loss: 3.3121 - val_acc: 0.2650 - val_top_5: 0.5319
+Learning Rate: 0.01
+Epoch 19/75
+28179/28179 [==============================] - 8240s - loss: 3.3571 - acc: 0.2437 - top_5: 0.5111 - val_loss: 3.3224 - val_acc: 0.2585 - val_top_5: 0.5262
+Learning Rate: 0.01
+Epoch 20/75
+28179/28179 [==============================] - 8239s - loss: 3.3750 - acc: 0.2416 - top_5: 0.5075 - val_loss: 3.3317 - val_acc: 0.2616 - val_top_5: 0.5292
+Learning Rate: 0.01
+Epoch 21/75
+28179/28179 [==============================] - 8236s - loss: 3.3994 - acc: 0.2380 - top_5: 0.5029 - val_loss: 3.3620 - val_acc: 0.2572 - val_top_5: 0.5261
+Learning Rate: 0.01
+Epoch 22/75
+28179/28179 [==============================] - 8228s - loss: 3.4305 - acc: 0.2346 - top_5: 0.4961 - val_loss: 3.4429 - val_acc: 0.2546 - val_top_5: 0.5143
+Epoch 23/75
+28179/28179 [==============================] - 8235s - loss: 3.4657 - acc: 0.2290 - top_5: 0.4889 - val_loss: 3.4593 - val_acc: 0.2456 - val_top_5: 0.5063
+Learning Rate: 0.01
+Epoch 24/75
+28179/28179 [==============================] - 8222s - loss: 3.5233 - acc: 0.2216 - top_5: 0.4772 - val_loss: 3.5284 - val_acc: 0.2417 - val_top_5: 0.5001
+Learning Rate: 0.01
+Epoch 25/75
+28179/28179 [==============================] - 8229s - loss: 3.6023 - acc: 0.2112 - top_5: 0.4608 - val_loss: 3.6105 - val_acc: 0.2308 - val_top_5: 0.4861
+Learning Rate: 0.01
+Epoch 26/75
+28179/28179 [==============================] - 8226s - loss: 3.6957 - acc: 0.1990 - top_5: 0.4413 - val_loss: 3.7543 - val_acc: 0.2138 - val_top_5: 0.4562
+Learning Rate: 0.01
+Epoch 27/75
+28179/28179 [==============================] - 8218s - loss: 3.8006 - acc: 0.1852 - top_5: 0.4193 - val_loss: 3.7991 - val_acc: 0.2049 - val_top_5: 0.4468
+Learning Rate: 0.01
+Epoch 28/75
+28179/28179 [==============================] - 8213s - loss: 3.9423 - acc: 0.1675 - top_5: 0.3897 - val_loss: 3.9834 - val_acc: 0.1846 - val_top_5: 0.4149
+Learning Rate: 0.01
+Epoch 29/75
+28179/28179 [==============================] - 8206s - loss: 4.1122 - acc: 0.1473 - top_5: 0.3545 - val_loss: 4.1586 - val_acc: 0.1640 - val_top_5: 0.3803
+Learning Rate: 0.01
+Epoch 30/75
+28179/28179 [==============================] - 8211s - loss: 4.3954 - acc: 0.1154 - top_5: 0.2959 - val_loss: 4.5701 - val_acc: 0.1217 - val_top_5: 0.3041
 
