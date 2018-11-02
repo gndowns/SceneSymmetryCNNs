@@ -36,9 +36,11 @@ def vgg11(nb_classes, nb_channels):
 
     Flatten(),
     # taken from vgg16 paper
-    Dense(4096, activation='relu', kernel_regularizer=l2(1e-7)),
+    #  Dense(4096, activation='relu', kernel_regularizer=l2(1e-7)),
+    Dense(4096, activation='relu'),
     Dropout(0.5),
-    Dense(4096, activation='relu', kernel_regularizer=l2(1e-7)),
+    #  Dense(4096, activation='relu', kernel_regularizer=l2(1e-7)),
+    Dense(4096, activation='relu'),
     Dropout(0.5),
     # For Places 205 categories
     Dense(nb_classes, activation='softmax')
