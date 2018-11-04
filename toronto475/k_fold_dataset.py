@@ -25,18 +25,21 @@ class KFoldDataset:
 
     # use dictionary to log accepted datasets
     # dataset: relative/path/to/images/from/root
+    root_dir = '/usr/local/data/gabriel/toronto/'
     directories = {
       #  'rgb': 'data/toronto/rgb',
-      'line_drawings': '/usr/local/data/gabriel/toronto/line_drawings',
+      'line_drawings': root_dir + 'line_drawings',
       #  'dR_symmetric': 'data/toronto/dR_symmetric',
       #  'dR_asymmetric': 'data/toronto/dR_asymmetric',
       #  'dR_weighted': 'data/toronto/dR_weighted',
       #  'd2R_weighted': 'data/toronto/d2R_weighted',
       #  'max_R': '/usr/local/data/gabriel/toronto/max_R',
-      'min_R_1': '/usr/local/data/gabriel/toronto/min_R_1',
-      'min_R_2': '/usr/local/data/gabriel/toronto/min_R_2',
-      'max_R_1': '/usr/local/data/gabriel/toronto/max_R_1',
-      'max_R_2': '/usr/local/data/gabriel/toronto/max_R_2',
+      'd_arc_length_1': root_dir + 'd_arc_length_1',
+      'd_arc_length_2': root_dir + 'd_arc_length_2',
+      'min_R_1': root_dir + 'min_R_1',
+      'min_R_2': root_dir + 'min_R_2',
+      'max_R_1': root_dir + 'max_R_1',
+      'max_R_2': root_dir + 'max_R_2',
       #  'dollar_weighted': 'data/toronto/dollar_weighted',
       #  'dollar_weighted_2': 'data/toronto/dollar_weighted_2',
       #  'skeletons': '/usr/local/data/gabriel/toronto/skeletons'
