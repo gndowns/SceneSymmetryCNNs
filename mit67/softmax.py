@@ -8,18 +8,17 @@
 # we instead run everything 5 times and take the mean
 
 from mit67_dataset import MIT67Dataset
-from vgg16_utils import vgg16_hybrid_1365, vgg16_hybrid_1365_stride
+from vgg16_utils import vgg16_hybrid_1365, vgg16_hybrid_1365_stride, vgg11
 from keras.layers import Dense
 from keras.optimizers import SGD
 from keras import backend as K
 import numpy as np
 import sys
 
-def train_and_test(datasets, model_str):
+def train_and_test(datasets, model_str, color_mode):
   train_dataset = datasets[0]
 
   img_size = (224,224)
-  color_mode = 'rgb'
 
   nb_datasets = len(datasets)
 
@@ -59,6 +58,13 @@ def trial(x_train, y_train, x_test, y_test, scores, model_str, i):
     model = vgg16_hybrid_1365(1)
   elif model_str == 'vgg16_hybrid_1365_stride':
     model = vgg16_hybrid_1365_stride(1)
+  # places line drawing network
+  elif model_str == 'places365_vgg11_runaway_weights.h5':
+    model = vgg11(365,1)
+    weights_file = 'models/' + model_str
+    model.load_weights(weights_file)
+    # remove old softmax
+    model.pop()
   else:
     print 'ERROR: model not implemented'
     sys.exit()
@@ -92,14 +98,20 @@ def trial(x_train, y_train, x_test, y_test, scores, model_str, i):
 def main():
   #  dataset_strs = ['rgb']
   #  dataset_strs = ['smooth']
-  dataset_strs = ['smooth', 'smooth_dR_symmetric', 'smooth_dR_asymmetric']
+  #  dataset_strs = ['smooth', 'smooth_dR_symmetric', 'smooth_dR_asymmetric']
+  dataset_strs = ['smooth', 'min_R_1', 'min_R_2']
 
   datasets = [MIT67Dataset(s) for s in dataset_strs]
 
   # choose which vgg16 model to use
-  #  model_str = 'vgg16_hybrid_1365'
-  model_str = 'vgg16_hybrid_1365_stride'
+  model_str = 'vgg16_hybrid_1365'
+  #  model_str = 'vgg16_hybrid_1365_stride'
+  #  model_str = 'places365_vgg11_runaway_weights.h5'
 
-  train_and_test(datasets, model_str)
+  # changes with which model we're using (number of channels)
+  #  color_mode = 'grayscale'
+  color_mode = 'rgb'
+
+  train_and_test(datasets, model_str, color_mode)
 
 main()
