@@ -99,7 +99,8 @@ def main():
   #  dataset_strs = ['rgb']
   #  dataset_strs = ['smooth']
   #  dataset_strs = ['smooth', 'smooth_dR_symmetric', 'smooth_dR_asymmetric']
-  dataset_strs = ['smooth', 'min_R_1', 'min_R_2']
+  #  dataset_strs = ['smooth', 'min_R_1', 'min_R_2']
+  dataset_strs = ['smooth', 'd_arc_length_1', 'd_arc_length_2']
 
   datasets = [MIT67Dataset(s) for s in dataset_strs]
 

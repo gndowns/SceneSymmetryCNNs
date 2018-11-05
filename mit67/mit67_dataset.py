@@ -23,6 +23,10 @@ class MIT67Dataset:
     directories = {
       #  'rgb': 'data/mit67/rgb',
       'smooth': root_dir + '/mit67/smooth',
+      'min_R_1': root_dir + '/mit67/min_R_1',
+      'min_R_2': root_dir + '/mit67/min_R_2',
+      'd_arc_length_1': root_dir + '/mit67/d_arc_length_1',
+      'd_arc_length_2': root_dir + '/mit67/d_arc_length_2'
       #  'smooth_dR_symmetric': 'data/mit67/smooth_dR_symmetric',
       #  'smooth_dR_asymmetric': 'data/mit67/smooth_dR_asymmetric',
       #  'dR_weighted': 'data/mit67/dR_weighted',
