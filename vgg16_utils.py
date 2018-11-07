@@ -13,7 +13,7 @@ from vgg16_hybrid_places_1365 import VGG16_Hybrid_1365
 from vgg16_places_365 import VGG16_Places365
 
 
-# 11-layer model A
+# 11-layer model A from the original VGG paper
 def vgg11(nb_classes, nb_channels):
   model = Sequential([
     Conv2D(64, (3, 3), input_shape=(224,224,nb_channels), padding='same', activation='relu'),
@@ -173,7 +173,8 @@ def vgg16_hybrid_1365_stride(nb_layers_removable=0):
 def vgg16_places365(nb_layers_removable=0):
   places = VGG16_Places365()
   # load vgg16 as sequential model 
-  model = vgg16_sequential(365)
+  # (weights were trained on rgb, requires 3 channels)
+  model = vgg16_sequential(365, 3)
   # copy places weights to sequential model
   model.set_weights(places.get_weights())
   # remove specified layers
