@@ -14,9 +14,14 @@
 
 ## MIT67 Fine Tuning Results
 
-| Dataset (as labelled on drive) | %-accuracy |
-| -------------- | ----- |
-| min_R_1        | 12.62 |
-| min_R_2        | 19.60 |
-| d_arc_length_1 | 19.49 |
-| d_arc_length_2 |  8.68 |
+| Dataset          | mean  | 5 trials |
+| --------------   | ----- | -------- |
+| min_R_1          | 12.62 | |
+| min_R_2          | 19.60 | |
+| d_arc_length_1   | 19.49 | |
+| d_arc_length_2   |  8.68 | |
+| contours         | 44.67 | 46.15, 45.93, 45.41, 45.26, 40.55 |
+| ribbon (alone)   | 39.38 | |
+| taper            | 39.73 | |
+| Intact + Ribbon  | |
+| Intact + Taper   | 43.21 | |

@@ -5,6 +5,7 @@ from vgg16_utils import vgg16_hybrid_1365, vgg16_hybrid_1365_stride
 from keras.layers import Dense
 from keras.optimizers import SGD
 from keras import backend as K
+from keras.callbacks import ModelCheckpoint
 import numpy as np
 
 def train_and_test(datasets, model_str):
@@ -60,12 +61,27 @@ def train_and_test(datasets, model_str):
       metrics=['accuracy']
     )
 
+    # save best weights only
+    filepath = 'models/mit67_smooth_taper.h5'
+    checkpoint = ModelCheckpoint(
+      filepath,
+      monitor='val_acc',
+      verbose=1,
+      save_best_only=True,
+      save_weights_only=True,
+      mode='max'
+    )
+
     model.fit(x_train, y_train,
       batch_size = 32,
       # converges very quickly, but takes more time than intact
       epochs = 10,
-      validation_data = (x_test, y_test)
+      validation_data = (x_test, y_test),
+      callbacks = [checkpoint]
     )
+
+    # load best weights
+    model.load_weights(filepath)
 
     scores[i] = model.evaluate(x_test,y_test)[1]
 
@@ -79,13 +95,20 @@ def train_and_test(datasets, model_str):
 
 def main():
   # choose 3 datasets
-  dataset_strs = ['smooth', 'dR_weighted', 'd2R_weighted']
+  #  dataset_strs = ['ribbon', 'ribbon', 'ribbon']
+  #  dataset_strs = ['taper', 'taper', 'taper']
+  #  dataset_strs = ['smooth', 'ribbon', 'ribbon']
+  #  dataset_strs = ['smooth', 'smooth', 'smooth']
+  dataset_strs = ['smooth', 'taper', 'taper']
+
+  print('using datasets: ')
+  print(dataset_strs)
 
   datasets = [MIT67Dataset(s) for s in dataset_strs]
 
   # choose which vgg16 model to use
-  #  model_str = 'vgg16_hybrid_1365'
-  model_str = 'vgg16_hybrid_1365_stride'
+  model_str = 'vgg16_hybrid_1365'
+  #  model_str = 'vgg16_hybrid_1365_stride'
 
   train_and_test(datasets, model_str)
 
