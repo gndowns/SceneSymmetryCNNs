@@ -84,14 +84,10 @@ def train_and_test(datasets):
 def main():
   # CHOOSE DATASETS HERE
   # the 1st will be used for training,
-  # all others will be tested on
-  #  dataset_strs = ['rgb']
   #  dataset_strs = ['line_drawings','dR_symmetric', 'dR_asymmetric']
-  #  dataset_strs = ['line_drawings', 'dR_weighted']
-  #  dataset_strs = ['skeletons']
-  #  dataset_strs = ['line_drawings', 'min_R_1', 'min_R_2']
-  #  dataset_strs = ['line_drawings', 'max_R_1', 'max_R_2']
-  dataset_strs = ['line_drawings', 'd_arc_length_1', 'd_arc_length_2']
+  #  dataset_strs = ['ribbon']
+  #  dataset_strs = ['separation']
+  dataset_strs = ['taper']
 
   datasets = [KFoldDataset(s) for s in dataset_strs]
 

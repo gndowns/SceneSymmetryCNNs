@@ -84,8 +84,8 @@ def main():
   #  dataset_strs = ['line_drawings', 'min_R', 'max_R']
   #  dataset_strs = ['line_drawings', 'dollar_weighted', 'dollar_weighted']
 
-  # sanity check
-  dataset_strs = ['line_drawings', 'line_drawings', 'line_drawings']
+  #  dataset_strs = ['line_drawings', 'ribbon', 'separation']
+  dataset_strs = ['line_drawings', 'taper', 'separation']
 
 
   datasets = [KFoldDataset(s) for s in dataset_strs]

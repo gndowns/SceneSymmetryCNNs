@@ -29,6 +29,9 @@ class KFoldDataset:
     directories = {
       #  'rgb': 'data/toronto/rgb',
       'line_drawings': root_dir + 'line_drawings',
+      'ribbon': root_dir + 'ribbon',
+      'taper': root_dir + 'taper',
+      'separation': root_dir + 'separation',
       #  'dR_symmetric': 'data/toronto/dR_symmetric',
       #  'dR_asymmetric': 'data/toronto/dR_asymmetric',
       #  'dR_weighted': 'data/toronto/dR_weighted',
