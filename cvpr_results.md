@@ -26,7 +26,24 @@
 | d_arc_length_1   | 19.49 | |
 | d_arc_length_2   |  8.68 | |
 | contours         | 44.67 | 46.15, 45.93, 45.41, 45.26, 40.55 |
+| contours (no callbacks) | 41.21 | 43.61 36.82 44.88, 42.35, 38.39 | 
 | ribbon (alone)   | 39.38 | |
 | taper            | 39.73 | |
-| Intact + Ribbon  | |
+| Intact + Ribbon  | 41.79 | 44.44, 39.28, 40.55, 40.55, 44.14 |
 | Intact + Taper   | 43.21 | |
+
+## MIT67 SVM Results
+(no data augmentation or fine tuning)
+
+| Dataset                    | mean  |
+| -------                    | ----- |
+| Contours                   | 26.36 |
+| contours, ribbon, ribbon   | 26.21 |
+| ribbon, ribbon, contour    | 26.89 |
+| contours, ribbon, taper    | 27.71 |
+| contours, contours, ribbon | 27.18 |
+| contours, taper, ribbon    | 27.48 |
+| contour, separ, separ      | 29.42 |
+| contour, ribbon, separ     | 29.80 |
+| contour, taper, separ      | 28.75 |
+| ribbon, taper, separ       | 25.84 | 

@@ -49,6 +49,7 @@ def train_and_test(datasets):
 
   # train linear svm
   svc = SVC(kernel='linear')
+  print('training svm...')
   svc.fit(bneck_train, train_labels)
 
   # evaluate
@@ -60,16 +61,21 @@ def train_and_test(datasets):
 
 def main():
   # CHOOSE 3 datasets
-  dataset_strs = ['smooth', 'dR_weighted', 'd2R_weighted']
-  #  dataset_strs = ['line_drawings', 'line_drawings', 'dR_weighted']
-  #  dataset_strs = ['line_drawings', 'd2R_weighted', 'd2R_weighted']
-  #  dataset_strs = ['line_drawings', 'line_drawings', 'd2R_weighted']
-  #  dataset_strs = ['line_drawings', 'd2R_weighted', 'dR_weighted']
-  #  dataset_strs = ['dR_weighted', 'line_drawings', 'd2R_weighted']
-  #  dataset_strs = ['dR_weighted', 'd2R_weighted', 'line_drawings']
-  #  dataset_strs = ['d2R_weighted', 'line_drawings', 'dR_weighted']
-  #  dataset_strs = ['d2R_weighted', 'dR_weighted', 'line_drawings']
+  #  dataset_strs = ['smooth', 'ribbon', 'taper']
+  #  dataset_strs = ['smooth', 'smooth', 'smooth']
+  #  dataset_strs = ['smooth', 'ribbon', 'ribbon']
+  #  dataset_strs = ['smooth', 'taper', 'taper']
+  #  dataset_strs = ['smooth', 'smooth', 'ribbon']
+  #  dataset_strs = ['ribbon', 'ribbon', 'smooth']
+  #  dataset_strs = ['smooth', 'separation', 'separation']
+  #  dataset_strs = ['smooth', 'ribbon', 'separation']
+  #  dataset_strs = ['smooth', 'taper', 'separation']
+  dataset_strs = ['ribbon', 'taper', 'separation']
 
+
+
+  print('using datasets: ')
+  print(dataset_strs)
 
   datasets = [MIT67Dataset(s) for s in dataset_strs]
 
