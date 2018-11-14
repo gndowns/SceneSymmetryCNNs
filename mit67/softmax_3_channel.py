@@ -11,7 +11,6 @@ import numpy as np
 def train_and_test(datasets, model_str):
   train_dataset = datasets[0]
 
-
   img_size = (224,224)
   color_mode = 'grayscale'
 
@@ -61,27 +60,12 @@ def train_and_test(datasets, model_str):
       metrics=['accuracy']
     )
 
-    # save best weights only
-    filepath = 'models/mit67_smooth_taper.h5'
-    checkpoint = ModelCheckpoint(
-      filepath,
-      monitor='val_acc',
-      verbose=1,
-      save_best_only=True,
-      save_weights_only=True,
-      mode='max'
-    )
-
     model.fit(x_train, y_train,
       batch_size = 32,
       # converges very quickly, but takes more time than intact
       epochs = 10,
-      validation_data = (x_test, y_test),
-      callbacks = [checkpoint]
+      validation_data = (x_test, y_test)
     )
-
-    # load best weights
-    model.load_weights(filepath)
 
     scores[i] = model.evaluate(x_test,y_test)[1]
 
@@ -99,7 +83,9 @@ def main():
   #  dataset_strs = ['taper', 'taper', 'taper']
   #  dataset_strs = ['smooth', 'ribbon', 'ribbon']
   #  dataset_strs = ['smooth', 'smooth', 'smooth']
-  dataset_strs = ['smooth', 'taper', 'taper']
+  #  dataset_strs = ['smooth', 'taper', 'taper']
+  #  dataset_strs = ['smooth', 'ribbon', 'ribbon']
+  dataset_strs = ['smooth', 'ribbon', 'taper']
 
   print('using datasets: ')
   print(dataset_strs)
