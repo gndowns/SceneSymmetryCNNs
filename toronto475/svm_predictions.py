@@ -22,14 +22,7 @@ def train_and_test(datasets):
 
   # load data as numpy arrays
   # (use rescale=1 for places CNN's)
-  X,Y = train_dataset.get_data(img_size, color_mode,1)
-  # load testing datasets
-  nb_test_sets = len(datasets[1:])
-  X_test,Y_test = [None]*nb_test_sets, [None]*nb_test_sets
-  for i in range(nb_test_sets):
-    X_test[i],Y_test[i] = datasets[i+1].get_data(img_size, color_mode,1)
-    # generate bottleneck features
-    X_test[i] = model.predict(X_test[i])
+  X,Y,train_fnames = train_dataset.get_data(img_size, color_mode,1)
 
   # init 5-fold cross validation
   kfold = StratifiedKFold(n_splits=5, shuffle=True)
@@ -40,6 +33,9 @@ def train_and_test(datasets):
   # generate bottleneck features (output of conv layers)
   X_bneck = model.predict(X)
 
+  # make array to store filename + prediction
+  predictions = [[f, -1] for f in train_fnames] 
+  
   i=0
   for train_idx, test_idx in kfold.split(X,labels):
     print('fold ' + str(i+1) + ' of 5')
@@ -51,13 +47,20 @@ def train_and_test(datasets):
     # evaluate
     print('predicting...')
     print(train_dataset.str)
-    test_predictions = svc.predict(X_bneck[test_idx]) 
-    print('test predictions: ' + str(test_predictions))
-    print('indices: ' + str(test_idx))
+    fold_predictions = svc.predict(X_bneck[test_idx]) 
+
+    # add predictions to final list, by index
+    for j in range(len(fold_predictions)):
+      # get index from test_idx list
+      pred_idx = test_idx[j]
+      # set prediction value for that specific image file
+      predictions[pred_idx][1] = fold_predictions[j]
 
     i += 1
 
 
+  # pretty print predictions, one per line
+  for p in predictions: print(p)
   print('done')
 
 

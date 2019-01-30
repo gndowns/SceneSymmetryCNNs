@@ -76,5 +76,5 @@ class KFoldDataset:
     for i in range(self.nb_samples):
       X[i], Y[i] = next(generator)
 
-    return (X, Y)
+    return (X, Y, generator.filenames)
 
